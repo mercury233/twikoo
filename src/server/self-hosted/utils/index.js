@@ -27,7 +27,7 @@ function getIpRegionSearcher () {
 }
 
 const fn = {
-  // 获取 Twikoo 云函数版本
+  // 获取 Twikoo 后端版本
   getFuncVersion (VERSION) {
     return {
       code: RES_CODE.SUCCESS,
@@ -283,7 +283,6 @@ const fn = {
     return {
       code: RES_CODE.SUCCESS,
       status: !!config.ADMIN_PASS,
-      credentials: !!config.CREDENTIALS,
       version
     }
   },
@@ -449,7 +448,6 @@ const fn = {
   },
   async getConfigForAdmin ({ config, isAdmin }) {
     if (isAdmin) {
-      delete config.CREDENTIALS
       return {
         code: RES_CODE.SUCCESS,
         config

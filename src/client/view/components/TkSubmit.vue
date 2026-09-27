@@ -251,7 +251,7 @@ export default {
           const body = options.body ? JSON.parse(options.body) : {}
           try {
             if (path.includes('challenge')) {
-              const res = await call(this.$tcb, 'CAP_CHALLENGE')
+              const res = await call('CAP_CHALLENGE')
               const result = res.result || res
               if (result.code && result.code !== 0) {
                 return { ok: false, json: async () => ({ error: result.message || 'challenge_failed' }) }
@@ -266,7 +266,7 @@ export default {
               }
             }
             if (path.includes('redeem')) {
-              const res = await call(this.$tcb, 'CAP_REDEEM', body)
+              const res = await call('CAP_REDEEM', body)
               const result = res.result || res
               if (result.code && result.code !== 0 && result.success !== true) {
                 return {
@@ -395,7 +395,7 @@ export default {
         if (this.captchaProvider === 'Cap' && (this.config.CAP_API_ENDPOINT || this.config.CAP_BUILTIN)) {
           comment.capToken = await this.getCapToken()
         }
-        const sendResult = await call(this.$tcb, 'COMMENT_SUBMIT', comment)
+        const sendResult = await call('COMMENT_SUBMIT', comment)
         if (sendResult && sendResult.result && sendResult.result.id) {
           this.comment = ''
           this.errorMessage = ''
@@ -455,7 +455,7 @@ export default {
       const nameSplit = photo.name.split('.')
       const fileType = nameSplit.length > 1 ? nameSplit.pop() : ''
       if (imageTypes.indexOf(fileType.toLowerCase()) === -1) return
-      const userId = this.getUserId()
+      const userId = localStorage.getItem('twikoo-access-token')
       const fileIndex = `${Date.now()}-${userId}`
       const fileName = nameSplit.join('.')
       const isGif = photo.type === 'image/gif'
@@ -464,19 +464,10 @@ export default {
       this.paste(this.getImagePlaceholder(fileIndex, newFileType))
       const imageCdn = this.config.IMAGE_CDN
       const compressedPhoto = await this.compressImage(photo)
-      if (this.$tcb && (!imageCdn || imageCdn === 'qcloud')) {
-        this.uploadPhotoToQcloud(fileIndex, newFileName, newFileType, compressedPhoto)
-      } else if (imageCdn) {
+      if (imageCdn) {
         this.uploadPhotoToThirdParty(fileIndex, newFileName, newFileType, compressedPhoto)
       } else {
         this.uploadFailed(fileIndex, newFileType, t('IMAGE_UPLOAD_FAILED_NO_CONF'))
-      }
-    },
-    getUserId () {
-      if (this.$tcb) {
-        return this.$tcb.auth.currentUser.uid
-      } else {
-        return localStorage.getItem('twikoo-access-token')
       }
     },
     async compressImage (photo) {
@@ -516,25 +507,9 @@ export default {
         reader.readAsDataURL(photo)
       })
     },
-    async uploadPhotoToQcloud (fileIndex, fileName, fileType, photo) {
-      try {
-        const uploadResult = await this.$tcb.app.uploadFile({
-          cloudPath: `tk-img/${fileIndex}.${fileType}`,
-          filePath: photo
-        })
-        if (uploadResult.fileID) {
-          const tempUrlResult = await this.$tcb.app.getTempFileURL({ fileList: [uploadResult.fileID] })
-          const tempFileUrl = tempUrlResult.fileList[0].tempFileURL
-          this.uploadCompleted(fileIndex, fileName, fileType, tempFileUrl)
-        }
-      } catch (e) {
-        console.error(e)
-        this.uploadFailed(fileIndex, fileType, e.message)
-      }
-    },
     async uploadPhotoToThirdParty (fileIndex, fileName, fileType, photo) {
       try {
-        const { result: uploadResult } = await call(this.$tcb, 'UPLOAD_IMAGE', {
+        const { result: uploadResult } = await call('UPLOAD_IMAGE', {
           fileName,
           photo: await blobToDataURL(photo)
         })

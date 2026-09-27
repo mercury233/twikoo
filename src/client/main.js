@@ -1,37 +1,26 @@
 import { version } from './version'
-import { install } from './utils/tcb'
 import { render } from './view'
-import { setLanguage, logger, isUrl, getCommentsCountApi, getRecentCommentsApi, getVisitorsCountApi, updateVisitorsCount } from './utils'
-
-async function initTcb (options) {
-  if (typeof cloudbase === 'undefined') {
-    logger.error('Please import cloudbase firstly:\n<script src="https://imgcache.qq.com/qcloud/cloudbase-js-sdk/1.3.3/cloudbase.full.js"></script>')
-    return null
-  }
-  /* eslint-disable-next-line no-undef */
-  return await install(cloudbase, options)
-}
+import { setLanguage, isUrl, getCommentsCountApi, getRecentCommentsApi, getVisitorsCountApi, updateVisitorsCount } from './utils'
 
 async function init (options = {}) {
-  const tcb = isUrl(options.envId) ? null : await initTcb(options)
+  if (!isUrl(options.envId)) {
+    throw new Error('envId 必须配置为 HTTP(S) 后端地址')
+  }
   setLanguage(options)
-  render(tcb, options)
-  await updateVisitorsCount(tcb, options)
+  render(options)
+  await updateVisitorsCount(options)
 }
 
 async function getCommentsCount (options = {}) {
-  const tcb = isUrl(options.envId) ? null : await initTcb(options)
-  return await getCommentsCountApi(tcb, options)
+  return await getCommentsCountApi(options)
 }
 
 async function getRecentComments (options = {}) {
-  const tcb = isUrl(options.envId) ? null : await initTcb(options)
-  return await getRecentCommentsApi(tcb, options)
+  return await getRecentCommentsApi(options)
 }
 
 async function getVisitorsCount (options = {}) {
-  const tcb = isUrl(options.envId) ? null : await initTcb(options)
-  return await getVisitorsCountApi(tcb, options)
+  return await getVisitorsCountApi(options)
 }
 
 export default init

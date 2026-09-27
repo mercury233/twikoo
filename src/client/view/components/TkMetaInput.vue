@@ -110,7 +110,7 @@ export default {
     },
     async getQQNick (qqNum) {
       try {
-        const { result } = await call(null, 'GET_QQ_NICK', { qq: qqNum })
+        const { result } = await call('GET_QQ_NICK', { qq: qqNum })
         if (result && result.nick) {
           this.metaData.nick = result.nick
           this.updateMeta()

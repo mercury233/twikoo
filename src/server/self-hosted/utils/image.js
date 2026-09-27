@@ -53,7 +53,6 @@ const fn = {
           return res
         }
       }
-      // tip: qcloud 图床走前端上传，其他图床走后端上传
       if (imageService === '7bu') {
         await fn.uploadImageToLskyPro({ image, config, res, imageCdn: 'https://7bu.top' })
       } else if (imageService === 'see') {

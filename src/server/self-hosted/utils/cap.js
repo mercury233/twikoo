@@ -155,82 +155,6 @@ function lokiStorage (db) {
   }
 }
 
-/** CloudBase / TCB database */
-function tcbStorage (db) {
-  const _ = db.command
-  return {
-    challenges: {
-      store: async (token, data) => {
-        const col = db.collection('cap_challenges')
-        try {
-          await col.doc(token).set({
-            token,
-            challenge: data.challenge,
-            expires: data.expires
-          })
-        } catch (e) {
-          // doc may exist
-          await col.doc(token).update({
-            challenge: data.challenge,
-            expires: data.expires
-          })
-        }
-      },
-      read: async (token) => {
-        try {
-          const res = await db.collection('cap_challenges').doc(token).get()
-          const doc = res.data && res.data[0]
-          if (!doc || doc.expires < Date.now()) return null
-          return { challenge: doc.challenge, expires: doc.expires }
-        } catch (e) {
-          return null
-        }
-      },
-      delete: async (token) => {
-        try { await db.collection('cap_challenges').doc(token).remove() } catch (e) {}
-      },
-      deleteExpired: async () => {
-        try {
-          await db.collection('cap_challenges').where({ expires: _.lte(Date.now()) }).remove()
-        } catch (e) {}
-      }
-    },
-    tokens: {
-      store: async (key, expires) => {
-        // CloudBase doc id cannot contain ':'
-        const id = key.replace(/:/g, '_')
-        try {
-          await db.collection('cap_tokens').doc(id).set({ key, expires })
-        } catch (e) {
-          await db.collection('cap_tokens').doc(id).update({ key, expires })
-        }
-      },
-      get: async (key) => {
-        try {
-          const id = key.replace(/:/g, '_')
-          const res = await db.collection('cap_tokens').doc(id).get()
-          const doc = res.data && res.data[0]
-          if (!doc || doc.expires < Date.now()) return null
-          return doc.expires
-        } catch (e) {
-          return null
-        }
-      },
-      delete: async (key) => {
-        try {
-          const id = key.replace(/:/g, '_')
-          await db.collection('cap_tokens').doc(id).remove()
-        } catch (e) {}
-      },
-      deleteExpired: async () => {
-        try {
-          await db.collection('cap_tokens').where({ expires: _.lte(Date.now()) }).remove()
-        } catch (e) {}
-      }
-    }
-  }
-}
-
 /**
  * EdgeOne Blob-style store: expects { get(key), set(key, value), del(key) }
  * value is JSON-serializable.
@@ -301,7 +225,6 @@ module.exports = {
   memoryStorage,
   mongoStorage,
   lokiStorage,
-  tcbStorage,
   kvStorage,
   createChallenge,
   redeemChallenge,

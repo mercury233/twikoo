@@ -87,7 +87,6 @@ const highlightPlugins = [
 ].map(s => `"${s}"`)
 
 const imageBedServices = [
-  'qcloud',
   '7bu (https://7bu.top)',
   'see (https://s.ee)',
   'lskypro',
@@ -143,14 +142,14 @@ export default {
     'Versi klien: '
   ],
   ADMIN_SERVER_VERSION: [
-    '云函数版本：',
-    '云函數版本：',
-    '雲端函式版本：',
+    '后端版本：',
+    '後端版本：',
+    '後端版本：',
     'Server version: ',
     'Сервернинг версияси: ',
     'サーバーサイドバージョン: ',
     '서버 버전: ',
-    'Phiên bản cloud function: ',
+    'Phiên bản backend: ',
     'Versi server: '
   ],
   [S.AC]: [
@@ -735,15 +734,15 @@ export default {
     `URL hosting gambar. Wajib diisi jika IMAGE_CDN Anda adalah salah satu dari: ${customImageBedServices.join(', ')}`
   ],
   [S.ACI + '_IMAGE_CDN_TOKEN']: [
-    '图床 token。qcloud 图床无需设置',
-    '图床 token。qcloud 图床无需设置',
-    '圖床 token。qcloud 圖床不需設定',
-    'The image bed token. Unnessessary for qcloud',
-    'Тасвир токен белгиси. Қслоуд учун кераксиз',
-    '画像ホスティングトークン。qcloud画像ホスティングを利用する場合は設定の必要はありません',
-    '이미지 호스팅 토큰. qcloud은 설정 불필요.',
-    'Token dịch vụ lưu trữ ảnh. Không cần thiết cho qcloud.',
-    'Token hosting gambar. Tidak diperlukan untuk qcloud.'
+    '图床 token',
+    '圖床 token',
+    '圖床 token',
+    'The image bed token',
+    'Тасвир токен белгиси',
+    '画像ホスティングトークン',
+    '이미지 호스팅 토큰',
+    'Token dịch vụ lưu trữ ảnh',
+    'Token hosting gambar'
   ],
   [S.ACI + '_NSFW_API_URL']: [
     'NSFW 图片检测 API 地址。免费服务：nsfw.qixz.cn，项目：github.com/HG-ha/nsfwpy',
@@ -1392,39 +1391,6 @@ export default {
     'Lưu',
     'Simpan'
   ],
-  ADMIN_CREDENTIALS: [
-    '私钥文件',
-    '私鑰文件',
-    '私鑰檔案',
-    'Private key file',
-    'Shaxsiy kalit fayli',
-    '秘密鍵ファイル',
-    '개인 키 파일',
-    'File khóa riêng tư',
-    'File kunci pribadi'
-  ],
-  ADMIN_CREDENTIALS_FAQ: [
-    '如何获得私钥',
-    '如何獲得私鑰',
-    '如何獲取私鑰',
-    'How to get the private key',
-    'Shaxsiy kalitni qanday olish mumkin',
-    '秘密鍵を取得する方法',
-    '개인 키 발급 방법',
-    'Cách lấy khóa riêng tư',
-    'Cara mendapatkan kunci pribadi'
-  ],
-  ADMIN_CREDENTIALS_PLACEHOLDER: [
-    '请粘贴私钥文件内容',
-    '請貼上私鑰文件內容',
-    '請貼上私鑰檔案內容',
-    'Please paste the contents of the private key file',
-    'Iltimos, shaxsiy kalit faylining mazmunini joylashtiring',
-    '秘密鍵ファイルの内容を貼り付けてください',
-    '개인 키 파일 내용을 붙여넣으세요',
-    'Hãy dán nội dung file khóa riêng tư vào đây',
-    'Silakan tempel isi file kunci pribadi'
-  ],
   ADMIN_FORGOT: [
     '忘记密码',
     '忘記密碼',
@@ -1634,28 +1600,6 @@ export default {
     'Hãy tải lên file xuất Valine định dạng JSON. Tên file thường là Comment.json',
     'Silakan unggah file ekspor Valine dalam format JSON, nama file biasanya Comment.json'
   ],
-  [S.AI + '_UPLOADED']: [
-    '上传完成 ',
-    '上傳完成 ',
-    '上傳完成 ',
-    'Uploaded ',
-    'Юкланди ',
-    'アップロード完了',
-    '업로드 완료 ',
-    'Đã tải lên ',
-    'Diunggah '
-  ],
-  [S.AI + '_UPLOADING']: [
-    '已上传 ',
-    '已上傳 ',
-    '已上傳 ',
-    'Uploading ',
-    'Юкланмоқда ',
-    'アップロード中です',
-    '업로드 중 ',
-    'Đang tải lên ',
-    'Mengunggah '
-  ],
   [S.AI + '_WARN']: [
     '支持从其他评论系统的备份文件导入评论。\n数据是安全的，导入功能完全在您的云环境进行。\n建议在导入前备份 comment 数据库。',
     '支持從其他評論系統的備份文件匯入評論。\n數據是安全的，匯入功能完全在您的雲環境進行。\n建議在匯入前備份 comment 數據庫。',
@@ -1701,14 +1645,14 @@ export default {
     'Keluar'
   ],
   ADMIN_NEED_UPDATE: [
-    '若要使用评论管理，请更新 Twikoo 云函数',
-    '若要使用評論管理，請更新 Twikoo 雲函數',
-    '若要使用留言管理功能，請更新 Twikoo 雲端函數',
+    '若要使用评论管理，请更新 Twikoo 后端',
+    '若要使用評論管理，請更新 Twikoo 後端',
+    '若要使用留言管理功能，請更新 Twikoo 後端',
     'A new version of Twikoo is required for comment management.',
     'Фикрларни бошқариш учун Твикоо нинг янги версияси талаб қилинади.',
-    'コメント管理を使用するには、Twikoo クラウド関数を更新してください',
-    '새 버전의 댓글 관리를 사용하려면 Twikoo Cloud Function을 업데이트하세요.',
-    'Cần cập nhật Twikoo Cloud Function để dùng quản lý bình luận.',
+    'コメント管理を使用するには、Twikoo バックエンドを更新してください',
+    '새 버전의 댓글 관리를 사용하려면 Twikoo 백엔드를 업데이트하세요.',
+    'Cần cập nhật Twikoo Backend để dùng quản lý bình luận.',
     'Versi baru Twikoo diperlukan untuk manajemen komentar.'
   ],
   ADMIN_PASSWORD: [

@@ -179,10 +179,10 @@ module.exports = async (request, response) => {
       default:
         if (event.event) {
           res.code = RES_CODE.EVENT_NOT_EXIST
-          res.message = '请更新 Twikoo 云函数至最新版本'
+          res.message = '请更新 Twikoo 后端至最新版本'
         } else {
           res.code = RES_CODE.NO_PARAM
-          res.message = 'Twikoo 云函数运行正常，请参考 https://twikoo.js.org/frontend.html 完成前端的配置'
+          res.message = 'Twikoo 后端运行正常，请参考 https://twikoo.js.org/frontend.html 完成前端的配置'
           res.version = VERSION
         }
     }
@@ -638,7 +638,7 @@ async function commentImportForAdmin (event) {
           break
         }
         default:
-          throw new Error(`不支持 ${event.source} 的导入，请更新 Twikoo 云函数至最新版本`)
+          throw new Error(`不支持 ${event.source} 的导入，请更新 Twikoo 后端至最新版本`)
       }
       await bulkSaveComments(comments)
       log('导入成功')

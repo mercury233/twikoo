@@ -105,7 +105,7 @@ export default {
   methods: {
     t,
     async initConfig () {
-      const result = await call(this.$tcb, 'GET_CONFIG')
+      const result = await call('GET_CONFIG')
       if (result && result.result && result.result.config) {
         this.config = result.result.config
         Vue.prototype.$twikoo.serverConfig = result.result.config
@@ -208,7 +208,7 @@ export default {
     async getComments (event) {
       const requestVersion = this.requestVersion
       try {
-        const comments = await call(this.$tcb, 'COMMENT_GET', event)
+        const comments = await call('COMMENT_GET', event)
         if (requestVersion !== this.requestVersion) return false
         if (comments && comments.result && comments.result.message) {
           this.errorMessage = comments.result.message

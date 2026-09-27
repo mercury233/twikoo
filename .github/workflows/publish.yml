@@ -24,8 +24,6 @@ jobs:
       - if: "github.event.release.prerelease"
         run: npm publish --provenance --tag beta
       - if: "github.event.release.prerelease"
-        run: cd src/server/function/twikoo && npm publish --provenance --tag beta
-      - if: "github.event.release.prerelease"
         run: cd src/server/vercel && npm publish --provenance --tag beta
       - if: "github.event.release.prerelease"
         run: cd src/server/self-hosted && npm publish --provenance --tag beta
@@ -33,8 +31,6 @@ jobs:
         run: cd src/server/netlify && npm publish --provenance --tag beta
       - if: "!github.event.release.prerelease"
         run: npm publish --provenance
-      - if: "!github.event.release.prerelease"
-        run: cd src/server/function/twikoo && npm publish --provenance
       - if: "!github.event.release.prerelease"
         run: cd src/server/vercel && npm publish --provenance
       - if: "!github.event.release.prerelease"
@@ -58,7 +54,6 @@ jobs:
           # All published packages with their paths
           PACKAGES=(
             "twikoo:."
-            "twikoo-func:src/server/function/twikoo"
             "twikoo-vercel:src/server/vercel"
             "tkserver:src/server/self-hosted"
             "twikoo-netlify:src/server/netlify"

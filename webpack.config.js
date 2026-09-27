@@ -31,14 +31,9 @@ function getConfig ({ extractCss }) {
         { test: /\.js$/, exclude: /node_modules[\\/](webpack|webpack-dev-server|webpack-cli)[\\/]/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-modules-commonjs', '@babel/transform-runtime'] } } }
       ]
     },
-    entry: extractCss
-      ? {
-          twikoo: './src/client/main.all.js'
-        }
-      : {
-          twikoo: './src/client/main.js',
-          'twikoo.all': './src/client/main.all.js'
-        },
+    entry: {
+      twikoo: './src/client/main.js'
+    },
     output: {
       path: BUILD_PATH,
       filename: extractCss ? '[name].nocss.js' : '[name].min.js',

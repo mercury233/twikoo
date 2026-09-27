@@ -14,8 +14,7 @@ Vue.use(Loading)
 
 let app = null
 
-const render = (tcb, options = {}) => {
-  Vue.prototype.$tcb = tcb
+const render = (options = {}) => {
   Vue.prototype.$twikoo = options
   app = new Vue({ render: h => h(App) })
   app.$mount(options.el || '#twikoo')

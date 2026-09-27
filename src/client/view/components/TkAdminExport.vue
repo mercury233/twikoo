@@ -22,7 +22,7 @@ export default {
     async doExport (collection) {
       this.loading = true
       try {
-        const result = await call(this.$tcb, 'COMMENT_EXPORT_FOR_ADMIN', {
+        const result = await call('COMMENT_EXPORT_FOR_ADMIN', {
           collection
         })
         if (result.result.data) {

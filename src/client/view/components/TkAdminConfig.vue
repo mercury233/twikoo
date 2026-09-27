@@ -84,7 +84,6 @@ export default {
               desc: t('ADMIN_CONFIG_ITEM_IMAGE_CDN'),
               options: [
                 { value: '', label: t('ADMIN_CONFIG_IMAGE_CDN_NONE') },
-                { value: 'qcloud', label: 'qcloud' },
                 { value: '7bu', label: '7bu (https://7bu.top)' },
                 { value: 'see', label: 'see (https://s.ee)' },
                 { value: 'lskypro', label: 'lskypro' },
@@ -203,7 +202,7 @@ export default {
     t,
     async readConfig () {
       this.loading = true
-      const res = await call(this.$tcb, 'GET_CONFIG_FOR_ADMIN')
+      const res = await call('GET_CONFIG_FOR_ADMIN')
       if (res.result && !res.result.code) {
         this.serverConfig = res.result.config
         if (typeof this.serverConfig.CAPTCHA_PROVIDER === 'undefined') {
@@ -263,7 +262,7 @@ export default {
         config.SHOW_IMAGE = config.IMAGE_CDN ? 'true' : 'false'
       }
       logger.log('保存配置', config)
-      await call(this.$tcb, 'SET_CONFIG', { config })
+      await call('SET_CONFIG', { config })
       await this.readConfig()
       // Notify other components (e.g. TkComments) to refresh config
       app.$emit('configUpdated')
@@ -272,7 +271,7 @@ export default {
     },
     async testEmail () {
       this.loading = true
-      const testResult = await call(this.$tcb, 'EMAIL_TEST', { mail: this.emailTestAddress })
+      const testResult = await call('EMAIL_TEST', { mail: this.emailTestAddress })
       logger.log('邮件测试', testResult)
       this.emailTestResult = JSON.stringify(testResult)
       this.loading = false

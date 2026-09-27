@@ -41,28 +41,28 @@ const convertLink = (link) => {
   return link
 }
 
-// 云函数版本
+// 后端版本
 let twikooFuncVer
-const getFuncVer = async (tcb) => {
+const getFuncVer = async () => {
   if (!twikooFuncVer) {
-    twikooFuncVer = await call(tcb, 'GET_FUNC_VERSION')
+    twikooFuncVer = await call('GET_FUNC_VERSION')
   }
   return twikooFuncVer
 }
 
-const getCommentsCountApi = async (tcb, options) => {
+const getCommentsCountApi = async (options) => {
   if (!(options.urls instanceof Array)) {
     throw new Error('urls 参数有误')
   }
   if (options.urls.length === 0) {
     return []
   }
-  const result = await call(tcb, 'GET_COMMENTS_COUNT', options)
+  const result = await call('GET_COMMENTS_COUNT', options)
   return result.result.data
 }
 
-const getRecentCommentsApi = async (tcb, options) => {
-  const result = await call(tcb, 'GET_RECENT_COMMENTS', options)
+const getRecentCommentsApi = async (options) => {
+  const result = await call('GET_RECENT_COMMENTS', options)
   // 封装相对评论时间
   for (const comment of result.result.data) {
     comment.relativeTime = timeago(comment.created)
@@ -131,10 +131,9 @@ const LOCALHOST_HOSTNAMES = new Set(['localhost', '127.0.0.1', '0.0.0.0', '::1']
 
 const isLocalhost = () => LOCALHOST_HOSTNAMES.has(window.location.hostname)
 
-const getVisitorsCountApi = async (tcb, options = {}) => {
-  const result = await call(tcb, 'COUNTER_GET', {
+const getVisitorsCountApi = async (options = {}) => {
+  const result = await call('COUNTER_GET', {
     envId: options.envId,
-    funcName: options.funcName,
     url: getUrl(options.path),
     href: getHref(options.href),
     title: options.title ?? document.title
@@ -142,11 +141,11 @@ const getVisitorsCountApi = async (tcb, options = {}) => {
   return result.result
 }
 
-const updateVisitorsCount = async (tcb, options = {}) => {
+const updateVisitorsCount = async (options = {}) => {
   const counterEl = document.getElementById('twikoo_visitors')
   if (!counterEl || isLocalhost()) return null
   try {
-    const counter = await getVisitorsCountApi(tcb, options)
+    const counter = await getVisitorsCountApi(options)
     if (counter.time || counter.time === 0) {
       counterEl.innerHTML = counter.time
     }

@@ -239,7 +239,7 @@ export default {
     async onLike () {
       if (this.likeLoading) return
       this.likeLoading = true
-      await call(this.$tcb, 'COMMENT_LIKE', { id: this.comment.id, type: 'up' })
+      await call('COMMENT_LIKE', { id: this.comment.id, type: 'up' })
       if (this.liked) {
         this.ups--
       } else {
@@ -255,7 +255,7 @@ export default {
     async onDislike () {
       if (this.likeLoading) return
       this.likeLoading = true
-      await call(this.$tcb, 'COMMENT_LIKE', { id: this.comment.id, type: 'down' })
+      await call('COMMENT_LIKE', { id: this.comment.id, type: 'down' })
       if (this.disliked) {
         this.downs--
       } else {
@@ -274,7 +274,7 @@ export default {
     },
     async onDelete () {
       if (!confirm(t('COMMENT_DELETE_CONFIRM'))) return
-      const { result } = await call(this.$tcb, 'COMMENT_DELETE_FOR_USER', {
+      const { result } = await call('COMMENT_DELETE_FOR_USER', {
         id: this.comment.id
       })
       if (result.code) {
@@ -329,12 +329,7 @@ export default {
     },
     async checkAuth () {
       // 检查用户身份
-      if (this.$tcb) {
-        const currentUser = await this.$tcb.auth.getCurrentUser()
-        this.isLogin = currentUser.loginType === 'CUSTOM'
-      } else {
-        this.isLogin = this.$twikoo.serverConfig && this.$twikoo.serverConfig.IS_ADMIN
-      }
+      this.isLogin = this.$twikoo.serverConfig && this.$twikoo.serverConfig.IS_ADMIN
     },
     handleSpam (isSpam) {
       this.setComment({ isSpam })
@@ -360,7 +355,7 @@ export default {
     },
     async setComment (set) {
       this.loading = true
-      await call(this.$tcb, 'COMMENT_SET_FOR_ADMIN', {
+      await call('COMMENT_SET_FOR_ADMIN', {
         id: this.comment.id,
         set
       })

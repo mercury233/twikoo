@@ -24,10 +24,7 @@
         <div class="tk-regist" v-if="!isLogin && !isSetPassword">
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
           <form>
-            <el-input class="tk-password" :placeholder="t('ADMIN_CREDENTIALS_PLACEHOLDER')" v-if="!isSetCredentials" v-model="credentials" ref="focusme">
-              <template slot="prepend">{{ t('ADMIN_CREDENTIALS') }}</template>
-            </el-input>
-            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password" show-password>
+            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password" show-password ref="focusme">
               <template slot="prepend">{{ t('ADMIN_SET_PASSWORD') }}</template>
             </el-input>
             <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_CONFIRM_PLACEHOLDER')" v-model="passwordConfirm" show-password>
@@ -36,9 +33,6 @@
           </form>
           <el-button class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}</el-button>
           <div class="tk-login-msg" v-if="loginErrorMessage">{{ loginErrorMessage }}</div>
-          <div class="tk-login-msg" v-if="!isSetCredentials">
-            <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{ t('ADMIN_CREDENTIALS_FAQ') }}</a>
-          </div>
         </div>
         <div class="tk-panel" v-if="isLogin">
           <div class="tk-panel-title">
@@ -88,8 +82,6 @@ export default {
       needUpdate: false,
       isLogin: false,
       isSetPassword: true,
-      isSetCredentials: false,
-      credentials: '',
       password: '',
       passwordConfirm: '',
       loginErrorMessage: '',
@@ -100,8 +92,7 @@ export default {
     canRegist () {
       return !this.isSetPassword &&
         !!this.password &&
-        this.password === this.passwordConfirm &&
-        (this.isSetCredentials || this.credentials)
+        this.password === this.passwordConfirm
     }
   },
   methods: {
@@ -114,22 +105,11 @@ export default {
       this.loading = true
       this.loginErrorMessage = ''
       const passwordMd5 = md5(this.password)
-      const res = await call(this.$tcb, 'LOGIN', {
+      const res = await call('LOGIN', {
         password: passwordMd5
       })
       if (res.result.message) {
         this.loginErrorMessage = res.result.message
-      } else if (res.result.ticket) {
-        try {
-          await this.$tcb.auth
-            .customAuthProvider()
-            .signIn(res.result.ticket)
-          logger.log('登录成功')
-          this.password = ''
-          this.checkAuth()
-        } catch (err) {
-          logger.error('登录失败', err)
-        }
       } else if (res.result.code === 0) {
         logger.log('登录成功')
         localStorage.setItem('twikoo-access-token', passwordMd5)
@@ -141,23 +121,15 @@ export default {
     async onLogout ($event) {
       $event.preventDefault()
       this.loading = true
-      if (this.$tcb) {
-        await this.$tcb.auth.signOut()
-        await this.$tcb.auth
-          .anonymousAuthProvider()
-          .signIn()
-      } else {
-        localStorage.removeItem('twikoo-access-token')
-      }
+      localStorage.removeItem('twikoo-access-token')
       this.isLogin = false
       this.loading = false
     },
     async onRegist () {
       this.loading = true
       const passwordMd5 = md5(this.password)
-      const res = await call(this.$tcb, 'SET_PASSWORD', {
-        password: passwordMd5,
-        credentials: this.credentials
+      const res = await call('SET_PASSWORD', {
+        password: passwordMd5
       })
       if (!res.result.code) {
         this.passwordMd5 = ''
@@ -189,23 +161,17 @@ export default {
     },
     async checkAuth () {
       // 检查用户身份
-      if (this.$tcb) {
-        const currentUser = await this.$tcb.auth.getCurrentUser()
-        this.isLogin = currentUser.loginType === 'CUSTOM'
-      } else {
-        const result = await call(this.$tcb, 'GET_CONFIG')
-        if (result && result.result && result.result.config) {
-          this.isLogin = result.result.config.IS_ADMIN
-        }
+      const result = await call('GET_CONFIG')
+      if (result && result.result && result.result.config) {
+        this.isLogin = result.result.config.IS_ADMIN
       }
     },
     async checkIfPasswordSet () {
       // 检查是否设置过密码
       try {
-        const res = await call(this.$tcb, 'GET_PASSWORD_STATUS')
+        const res = await call('GET_PASSWORD_STATUS')
         this.version = res.result.version
         this.isSetPassword = res.result.status
-        this.isSetCredentials = !this.$tcb
       } catch (e) {
         this.needUpdate = true
         this.loading = false

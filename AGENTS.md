@@ -18,13 +18,13 @@
 ## 当前架构
 
 - `src/client/`：Vue 2 + Element UI 客户端，当前使用 Webpack 5 输出 UMD 库。
-- `src/client/main.js` 与 `main.all.js`：分别为不内置和内置 CloudBase SDK 的入口。
-- `src/client/utils/api.js`：请求入口；URL 类型的 `envId` 使用 HTTP POST，CloudBase 环境 ID 使用云函数调用。
+- `src/client/main.js`：客户端入口，提供初始化、评论数量、最新评论与访客统计接口。
+- `src/client/utils/api.js`：请求入口；`envId` 为 HTTP(S) 后端地址，统一使用 HTTP POST。
 - `src/client/view/components/`：评论及管理界面组件。
 - `src/client/utils/i18n/i18n.js`：界面翻译；新增 UI 文本应沿用现有国际化机制并补充翻译。
 - `src/server/self-hosted/server.js`：Node.js HTTP 服务入口，根据数据库环境变量选择 LokiJS 或 MongoDB 实现。
 - `src/server/self-hosted/index.js` 与 `mongo.js`：两种数据库下的业务实现；修改共同功能时检查两者是否需要同步。
-- `src/server/function/twikoo/utils/`：self-hosted 当前通过 `twikoo-func/utils/*` 引用的公共代码。直接修改本目录未必影响本地服务实际加载的 npm 包，验证时注意模块解析来源。
+- `src/server/self-hosted/utils/`：self-hosted 使用的本地公共代码。
 - 前后端通过事件名（如 `COMMENT_SUBMIT`、`GET_CONFIG`）交互，服务端通过事件分发执行处理函数。
 - `Dockerfile` 和 `src/server/pkg/`：当前仍依赖已发布的 `tkserver`，源码重组时需要检查这些发布入口。
 - `.github/workflows/`：构建、文档和发布流程，当前仍存在 Yarn 与 npm 发布逻辑。

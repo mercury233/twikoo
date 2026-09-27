@@ -96,7 +96,7 @@ export default {
     },
     async getComments () {
       this.loading = true
-      const res = await call(this.$tcb, 'COMMENT_GET_FOR_ADMIN', {
+      const res = await call('COMMENT_GET_FOR_ADMIN', {
         per: this.pageSize,
         page: this.currentPage,
         keyword: this.filter.keyword,
@@ -117,7 +117,7 @@ export default {
       this.loading = false
     },
     async getConfig () {
-      const res = await call(this.$tcb, 'GET_CONFIG_FOR_ADMIN')
+      const res = await call('GET_CONFIG_FOR_ADMIN')
       if (res.result && !res.result.code) {
         this.serverConfig = res.result.config
         this.checkConfig()
@@ -193,7 +193,7 @@ export default {
     async handleDelete (comment) {
       if (!confirm(t('ADMIN_COMMENT_DELETE_CONFIRM'))) return
       this.loading = true
-      await call(this.$tcb, 'COMMENT_DELETE_FOR_ADMIN', {
+      await call('COMMENT_DELETE_FOR_ADMIN', {
         id: comment._id
       })
       await this.getComments()
@@ -207,7 +207,7 @@ export default {
     },
     async setComment (comment, set) {
       this.loading = true
-      await call(this.$tcb, 'COMMENT_SET_FOR_ADMIN', {
+      await call('COMMENT_SET_FOR_ADMIN', {
         id: comment._id,
         set
       })

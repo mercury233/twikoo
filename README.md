@@ -18,11 +18,6 @@ A **simple**, **safe**, **free** comment system.
 <details>
 <summary>点击展开</summary>
 
-### 简单
-
-* 免费搭建（使用云开发 / Vercel / 私有部署评论后台）
-* 简单部署（支持云开发 / Vercel 一键部署）
-
 ### 易用
 
 * 支持回复、点赞
@@ -32,7 +27,6 @@ A **simple**, **safe**, **free** comment system.
 * 访客填写数字 QQ 邮箱，会使用 QQ 头像作为评论头像
 * 支持评论框粘贴图片（可禁用）
 * 支持插入图片（可禁用）
-* 支持去不图床、云开发图床
 * 支持插入表情（可禁用）
 * 支持 Ctrl + Enter 快捷回复
 * 评论框内容实时保存草稿，刷新不会丢失
@@ -41,7 +35,7 @@ A **simple**, **safe**, **free** comment system.
 
 ### 安全
 
-* 隐私信息安全（通过云函数控制敏感字段（邮箱、IP、环境配置等）不会泄露）
+* 隐私信息安全（通过后端控制敏感字段（邮箱、IP、环境配置等）不会泄露）
 * 支持 Akismet 垃圾评论检测（需自行注册 [akismet.com](https://akismet.com/)）
 * 支持腾讯云内容安全垃圾评论检测（需自行注册 [腾讯云内容安全](https://console.cloud.tencent.com/cms/text/overview)）
 * 支持人工审核模式
@@ -119,7 +113,7 @@ A **simple**, **safe**, **free** comment system.
 ``` sh
 yarn dev # 开发 (http://localhost:9820/demo.html)
 yarn lint # 代码检查
-yarn build # 编译 (dist/twikoo.all.min.js)
+yarn build # 编译 (dist/twikoo.min.js)
 ```
 
 如果您的改动能够帮助到更多人，欢迎提交 Pull Request！
