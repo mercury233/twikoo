@@ -5,7 +5,6 @@ const {
   getPushoo
 } = require('./lib')
 const htmlToText = getHtmlToText()
-const pushoo = getPushoo()
 const { RES_CODE } = require('./constants')
 const logger = require('./logger')
 
@@ -157,6 +156,7 @@ const fn = {
       return
     }
     const pushContent = fn.getIMPushContent(comment, config)
+    const pushoo = await getPushoo()
     const sendResult = await pushoo(config.PUSHOO_CHANNEL, {
       token: config.PUSHOO_TOKEN,
       title: pushContent.subject,
