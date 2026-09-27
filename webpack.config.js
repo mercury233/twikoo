@@ -30,9 +30,12 @@ function getConfig() {
             {
               loader: 'postcss-loader',
               options: {
-                postcssOptions: {
-                  plugins: [require('autoprefixer')()]
-                }
+                postcssOptions: loaderContext => ({
+                  plugins: [
+                    require('autoprefixer')(),
+                    ...(loaderContext.mode === 'production' ? [require('cssnano')({ preset: 'default' })] : [])
+                  ]
+                })
               }
             }
           ]
