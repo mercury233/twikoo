@@ -30,7 +30,6 @@
   "homepage": "https://github.com/mercury233/twikoo#readme",
   "dependencies": {
     "@imaegoo/node-ip2region": "^2.1.1",
-    "@xsai/generate-text": "0.2.2",
     "akismet-api": "^5.1.0",
     "axios": "^1.6.2",
     "bowser": "^2.11.0",
