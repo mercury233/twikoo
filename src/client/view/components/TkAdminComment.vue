@@ -1,10 +1,5 @@
 <template>
   <div class="tk-admin-comment" v-loading="loading">
-    <div class="tk-admin-warn" v-if="clientVersion !== serverVersion">
-      <span>{{ t('ADMIN_CLIENT_VERSION') }}{{ clientVersion }}，</span>
-      <span>{{ t('ADMIN_SERVER_VERSION') }}{{ serverVersion }}，</span>
-      <span>请参考&nbsp;<a href="https://twikoo.js.org/update.html" target="_blank">版本更新</a>&nbsp;进行升级</span>
-    </div>
     <div class="tk-admin-comment-filter">
       <tk-input
           class="tk-admin-comment-filter-keyword"
@@ -59,7 +54,6 @@
 <script>
 import { app } from '../index'
 import { timeago, call, convertLink, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
-import { version } from '../../version'
 import TkAvatar from './TkAvatar.vue'
 import TkPagination from './TkPagination.vue'
 import iconClose from '@fortawesome/fontawesome-free/svgs/solid/times.svg'
@@ -76,8 +70,6 @@ export default {
       loading: true,
       comments: [],
       serverConfig: {},
-      serverVersion: this.$twikoo.serverConfig.VERSION,
-      clientVersion: version,
       count: 0,
       pageSize: defaultPageSize,
       currentPage: 1,

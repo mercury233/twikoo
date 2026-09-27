@@ -1,10 +1,5 @@
 <template>
   <div class="tk-admin-config" v-loading="loading">
-    <div class="tk-admin-warn" v-if="clientVersion !== serverVersion">
-      <span>{{ t('ADMIN_CLIENT_VERSION') }}{{ clientVersion }}，</span>
-      <span>{{ t('ADMIN_SERVER_VERSION') }}{{ serverVersion }}，</span>
-      <span>请参考&nbsp;<a href="https://twikoo.js.org/update.html" target="_blank">版本更新</a>&nbsp;进行升级</span>
-    </div>
     <form @submit.prevent="saveConfig">
     <div class="tk-admin-config-groups">
       <details class="tk-admin-config-group" v-for="settingGroup in settings" :key="settingGroup.name">
@@ -46,7 +41,6 @@
 
 <script>
 import { call, logger, t } from '../../utils'
-import { version } from '../../version'
 import { app } from '../index'
 
 export default {
@@ -177,8 +171,6 @@ export default {
         }
       ],
       serverConfig: {},
-      serverVersion: this.$twikoo.serverConfig.VERSION,
-      clientVersion: version,
       message: '',
       emailTestAddress: '',
       emailTestResult: ''

@@ -1,21 +1,8 @@
 <template>
   <div class="tk-footer">
-    Powered by <a href="https://twikoo.js.org" target="_blank">Twikoo</a>
-    v{{ version }}
+    Powered by <a href="https://github.com/mercury233/twikoo" target="_blank">@mercury233/twikoo</a>
   </div>
 </template>
-
-<script>
-import { version } from '../../version'
-
-export default {
-  data () {
-    return {
-      version
-    }
-  }
-}
-</script>
 
 <style>
 .tk-footer {

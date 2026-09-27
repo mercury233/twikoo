@@ -40,15 +40,6 @@ const convertLink = (link) => {
   return link
 }
 
-// 后端版本
-let twikooFuncVer
-const getFuncVer = async () => {
-  if (!twikooFuncVer) {
-    twikooFuncVer = await call('GET_FUNC_VERSION')
-  }
-  return twikooFuncVer
-}
-
 const getCommentsCountApi = async (options) => {
   if (!(options.urls instanceof Array)) {
     throw new Error('urls 参数有误')
@@ -226,7 +217,6 @@ export {
   marked,
   isUrl,
   call,
-  getFuncVer,
   normalizeMail,
   isQQ,
   getQQAvatar,

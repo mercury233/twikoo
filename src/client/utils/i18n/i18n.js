@@ -114,28 +114,6 @@ const defaultGravatar = [
  * ]
  */
 export default {
-  ADMIN_CLIENT_VERSION: [
-    '前端版本：',
-    '前端版本：',
-    '前端版本：',
-    'Client version: ',
-    'Клиент версияси: ',
-    'クライアントバージョン：',
-    '클라이언트 버전: ',
-    'Phiên bản client: ',
-    'Versi klien: '
-  ],
-  ADMIN_SERVER_VERSION: [
-    '后端版本：',
-    '後端版本：',
-    '後端版本：',
-    'Server version: ',
-    'Сервернинг версияси: ',
-    'サーバーサイドバージョン: ',
-    '서버 버전: ',
-    'Phiên bản backend: ',
-    'Versi server: '
-  ],
   [S.AC]: [
     '评论管理',
     '評論管理',
