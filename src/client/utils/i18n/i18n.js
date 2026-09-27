@@ -70,22 +70,6 @@ const smtpServices = [
   'qiye.aliyun'
 ].map(s => `"${s}"`)
 
-const highlightThemes = [
-  'default',
-  'coy',
-  'dark',
-  'funky',
-  'okaidia',
-  'solarizedlight',
-  'tomorrow',
-  'twilight'
-].map(s => `"${s}"`)
-
-const highlightPlugins = [
-  'showLanguage',
-  'copyButton'
-].map(s => `"${s}"`)
-
 const imageBedServices = [
   '7bu (https://7bu.top)',
   'see (https://s.ee)',
@@ -666,39 +650,6 @@ export default {
     'QQ 닉네임 API 키. https://api.tqq.me/dashboard/api-keys 에서 발급',
     'API key lấy biệt danh QQ. Lấy tại https://api.tqq.me/dashboard/api-keys',
     'Kunci API nama panggilan QQ. Dapatkan dari https://api.tqq.me/dashboard/api-keys'
-  ],
-  [S.ACI + '_HIGHLIGHT']: [
-    '启用代码高亮功能。如果您的主题和代码高亮有冲突，请设为 false。默认：true',
-    '啟用代碼高亮功能。如果您的主題和代碼高亮有衝突，請設為 false。預設：true',
-    '啟用程式碼醒目顯示功能。如果您的主題和此功能發生衝突，請設定為 false。預設：true',
-    'Enable code highlighting. If your theme conflicts with code highlighting, please set it to false. Default: true.',
-    'Кодни ажратиб кўрсатишни ёқинг. Агар мавзуингиз кодни ажратиб кўрсатишга зид бўлса, уни «фалсе» га ўрнатинг. Стандарт: рост.',
-    'コードハイライト機能を有効にします。テーマとコードハイライトに競合がある場合、falseに設定してください。デフォルト：true',
-    '코드 하이라이팅 기능을 활성화합니다. 테마와 코드 하이라이팅이 충돌하면 false로 설정하세요. 기본값: true.',
-    'Bật tô sáng code. Nếu theme xung đột, đặt thành false. Mặc định: true.',
-    'Aktifkan penyorotan kode. Jika tema Anda bertentangan dengan penyorotan kode, atur ke false. Bawaan: true.'
-  ],
-  [S.ACI + '_HIGHLIGHT_THEME']: [
-    `代码高亮主题，可选：${highlightThemes.join('、')}，访问 https://prismjs.com 可预览主题效果。如果您的主题和代码高亮有冲突，请设为 none。默认：none`,
-    `代碼高亮主題，可選：${highlightThemes.join('、')}，訪問 https://prismjs.com 可預覽主題效果。如果您的主題和代碼高亮有衝突，請設為 none。預設：none`,
-    `程式碼醒目顯示主題，選項：${highlightThemes.join('、')}，瀏覽 https://prismjs.com 可預覽主題效果。如果您的主題和此功能發生衝突，請設定為 none。預設：none`,
-    `Code highlighting theme. Select from: ${highlightThemes.join(', ')}. Visit https://prismjs.com for preview. If your theme conflicts with code highlighting, please set it to none. Default: none.`,
-    `Кодни таъкидлаш мавзуси. Қуйидагилардан танланг: ${highlightThemes.join(', ')}. Олдиндан кўриш учун https://prismjs.com сайтига ташриф буюринг. Агар мавзуингиз кодни ажратиб кўрсатишга зид бўлса, уни «Ҳеч» га ўрнатинг. Стандарт: йўқ.`,
-    `コードハイライトのテーマ。選択肢：${highlightThemes.join('、')}、テーマの効果をプレビューするには https://prismjs.com を訪問してください。テーマとコードハイライトに競合がある場合、noneに設定してください。デフォルト：none`,
-    `코드 하이라이팅 테마. 사용 가능 테마: ${highlightThemes.join(', ')}. https://prismjs.com 에서 미리보기를 확인하세요. 테마와 코드 하이라이팅이 충돌하면 none으로 설정하세요. 기본값: none.`,
-    `Theme tô sáng code. Truy cập ${highlightThemes.join(', ')}. https://prismjs.com để xem trước. Mặc định: none.`,
-    `Tema penyorotan kode. Pilih dari: ${highlightThemes.join(', ')}. Kunjungi https://prismjs.com untuk pratinjau. Jika tema Anda bertentangan dengan penyorotan kode, atur ke none. Bawaan: none.`
-  ],
-  [S.ACI + '_HIGHLIGHT_PLUGIN']: [
-    `代码高亮插件，可选：${highlightPlugins.join('、')}，分别表示：展示代码语言、展示代码拷贝按钮。可以同时设置多个选项，如果想要不添加任何代码高亮插件，请设为 none。默认：none。`,
-    `代碼高亮插件，可選：${highlightPlugins.join('、')}，分別表示：展示代碼語言、展示代碼拷貝按鈕。可以同時設置多個選項，如果想要不添加任何代碼高亮插件，請設為 none。預設：none。`,
-    `代碼高亮外掛程式，可選：${highlightPlugins.join('、')}，分別表示：展示代碼語言、展示代碼拷貝按鈕。 可以同時設置多個選項，如果想要不添加任何代碼高亮外掛程式，請設定為 none。預設：none。`,
-    `Code highlight plug-in, optional: ${highlightPlugins.join(', ')}, respectively: show code language, show code copy button. Multiple options can be set at the same time, if you want to add no code highlighting plug-ins, please set it to none. Default: none. `,
-    `Плагин подсветки кода, опционально: ${highlightPlugins.join(',')}, соответственно: показывать язык кода, показывать кнопку копирования кода. Вы можете установить несколько опций одновременно, если вы хотите не добавлять плагин подсветки кода, установите значение none. по умолчанию: none.`,
-    `コード・ハイライト・プラグイン。オプション: ${highlightPlugins.join(',')}, それぞれ: コード言語の表示、コード・コピー・ボタンの表示。複数のオプションを同時に設定できますが、コード・ハイライト・プラグインを追加したくない場合は、noneに設定してください。`,
-    `코드 하이라이트 추가 기능. 선택 가능: ${highlightPlugins.join(', ')}. (코드 언어 표시, 복사 버튼) 여러 기능을 동시에 설정할 수 있으며, 추가하지 않으려면 none으로 설정하세요. 기본값: none.`,
-    `Plugin tô sáng code. Để không dùng plugin ${highlightPlugins.join(', ')}, đặt thành none. Mặc định: none.`,
-    `Plugin penyorotan kode. Pilihan: ${highlightPlugins.join(', ')}, masing-masing: tampilkan bahasa kode, tampilkan tombol salin kode. Dapat mengatur beberapa opsi sekaligus. Jika tidak ingin plugin penyorotan kode, atur ke none. Bawaan: none.`
   ],
   [S.ACI + '_IMAGE_CDN']: [
     `插入图片所使用的图床，目前支持：${imageBedServices.join('、')}`,

@@ -2,7 +2,6 @@ import t, { setLanguage } from './i18n'
 import DOMPurify from 'dompurify'
 import timeago from './timeago'
 import marked from './marked'
-import renderCode from './highlight'
 import { isUrl, call } from './api'
 import { normalizeMail, isQQ, getQQAvatar } from './avatar'
 import { initOwoEmotions, initMarkedOwo } from './emotion'
@@ -225,7 +224,6 @@ export {
   timestamp,
   convertLink,
   marked,
-  renderCode,
   isUrl,
   call,
   getFuncVer,

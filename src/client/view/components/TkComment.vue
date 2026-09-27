@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { timeago, convertLink, call, renderLinks, renderMath, renderCode, sanitizeHtml, t } from '../../utils'
+import { timeago, convertLink, call, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
 import TkAction from './TkAction.vue'
 import TkAvatar from './TkAvatar.vue'
 import TkSubmit from './TkSubmit.vue'
@@ -392,16 +392,6 @@ export default {
       handler: function (downs) {
         this.downs = this.comment.downs
         this.disliked = this.comment.disliked
-      },
-      immediate: true
-    },
-    'config.HIGHLIGHT': {
-      handler: function (highlight) {
-        if (highlight === 'true') {
-          this.$nextTick(() => {
-            renderCode(this.$refs.comment, this.config.HIGHLIGHT_THEME, this.config.HIGHLIGHT_PLUGIN)
-          })
-        }
       },
       immediate: true
     }

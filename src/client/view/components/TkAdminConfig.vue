@@ -108,9 +108,6 @@ export default {
             { key: 'NSFW_THRESHOLD', desc: t('ADMIN_CONFIG_ITEM_NSFW_THRESHOLD'), ph: `${t('ADMIN_CONFIG_EXAMPLE')}0.5`, value: '' },
             { key: 'SHOW_EMOTION', desc: t('ADMIN_CONFIG_ITEM_SHOW_EMOTION'), ph: `${t('ADMIN_CONFIG_EXAMPLE')}false`, value: '' },
             { key: 'EMOTION_CDN', desc: t('ADMIN_CONFIG_ITEM_EMOTION_CDN'), ph: '', value: '' },
-            { key: 'HIGHLIGHT', desc: t('ADMIN_CONFIG_ITEM_HIGHLIGHT'), ph: `${t('ADMIN_CONFIG_EXAMPLE')}false`, value: '' },
-            { key: 'HIGHLIGHT_THEME', desc: t('ADMIN_CONFIG_ITEM_HIGHLIGHT_THEME'), ph: `${t('ADMIN_CONFIG_EXAMPLE')}tomorrow`, value: '' },
-            { key: 'HIGHLIGHT_PLUGIN', desc: t('ADMIN_CONFIG_ITEM_HIGHLIGHT_PLUGIN'), ph: `${t('ADMIN_CONFIG_EXAMPLE')}showLanguage`, value: '' },
             { key: 'LIGHTBOX', desc: t('ADMIN_CONFIG_ITEM_LIGHTBOX'), ph: `${t('ADMIN_CONFIG_EXAMPLE')}true`, value: '' }
           ]
         },

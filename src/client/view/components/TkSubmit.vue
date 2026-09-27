@@ -56,7 +56,7 @@ import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg'
 import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg'
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import OwO from '../../lib/owo'
-import { blobToDataURL, call, getHref, getUrl, getUserAgent, initMarkedOwo, initOwoEmotions, logger, marked, renderCode, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
+import { blobToDataURL, call, getHref, getUrl, getUserAgent, initMarkedOwo, initOwoEmotions, logger, marked, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
 import TkAvatar from './TkAvatar.vue'
 import TkMetaInput from './TkMetaInput.vue'
 
@@ -261,9 +261,6 @@ export default {
         this.$nextTick(() => {
           renderLinks(this.$refs['comment-preview'])
           renderMath(this.$refs['comment-preview'], this.$twikoo.katex)
-          if (this.config.HIGHLIGHT === 'true') {
-            renderCode(this.$refs['comment-preview'], this.config.HIGHLIGHT_THEME, this.config.HIGHLIGHT_PLUGIN)
-          }
         })
       }
     },

@@ -58,7 +58,7 @@
 
 <script>
 import { app } from '../index'
-import { timeago, call, convertLink, renderLinks, renderMath, renderCode, sanitizeHtml, t } from '../../utils'
+import { timeago, call, convertLink, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
 import { version } from '../../version'
 import TkAvatar from './TkAvatar.vue'
 import TkPagination from './TkPagination.vue'
@@ -112,7 +112,6 @@ export default {
       this.$nextTick(() => {
         renderLinks(this.$refs.comments)
         renderMath(this.$refs['comment-list'], this.$twikoo.katex)
-        this.highlightCode()
       })
       this.loading = false
     },
@@ -124,7 +123,6 @@ export default {
       }
     },
     checkConfig () {
-      if (!this.serverConfig.HIGHLIGHT) this.serverConfig.HIGHLIGHT = 'true'
       // 在已登錄的情況下，不用再輸入昵稱和郵箱等信息
       let metaData = {}
       const mStr = localStorage.getItem('twikoo')
@@ -213,11 +211,6 @@ export default {
       })
       await this.getComments()
       this.loading = false
-    },
-    highlightCode () {
-      if (this.serverConfig.HIGHLIGHT === 'true') {
-        renderCode(this.$refs['comment-list'], this.serverConfig.HIGHLIGHT_THEME, this.serverConfig.HIGHLIGHT_PLUGIN)
-      }
     }
   },
   async mounted () {
@@ -225,7 +218,6 @@ export default {
       this.getConfig(),
       this.getComments()
     ])
-    this.highlightCode()
   }
 }
 </script>
