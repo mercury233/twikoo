@@ -1,11 +1,6 @@
 const crypto = require('crypto')
 
-let customLibs = {}
-
 module.exports = {
-  setCustomLibs (libs) {
-    customLibs = libs
-  },
   getHtmlToText () {
     const { compile } = require('html-to-text') // HTML 转纯文本
     return compile({
@@ -33,7 +28,6 @@ module.exports = {
     return bowser
   },
   getDomPurify () {
-    if (customLibs.DOMPurify) return customLibs.DOMPurify
     // 初始化反 XSS
     const { JSDOM } = require('jsdom') // document.window 服务器版
     const createDOMPurify = require('dompurify') // 反 XSS
@@ -60,7 +54,6 @@ module.exports = {
     }
   },
   getNodemailer () {
-    if (customLibs.nodemailer) return customLibs.nodemailer
     const nodemailer = require('nodemailer') // 发送邮件
     return nodemailer
   },
