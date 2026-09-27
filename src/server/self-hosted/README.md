@@ -16,8 +16,6 @@ tkserver
 
 | 名称 | 描述 | 默认值 |
 | ---- | ---- | ---- |
-| `MONGODB_URI` | MongoDB 数据库连接字符串，不传则使用 lokijs | `null` |
-| `MONGO_URL` | MongoDB 数据库连接字符串，不传则使用 lokijs | `null` |
 | `TWIKOO_DATA` | lokijs 数据库存储路径 | `./data` |
 | `TWIKOO_HOST` | 自定义监听的主机名或IP地址（例如 0.0.0.0 或 127.0.0.1）,设置该值则会忽略 TWIKOO_LOCALHOST_ONLY，默认值为 null 但实际行为会回退到 `::` | `null` |
 | `TWIKOO_PORT` | 端口号 | `8080` |

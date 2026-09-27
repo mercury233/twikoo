@@ -22,8 +22,8 @@
 - `src/client/utils/api.js`：请求入口；`envId` 为 HTTP(S) 后端地址，统一使用 HTTP POST。
 - `src/client/view/components/`：评论及管理界面组件。
 - `src/client/utils/i18n/i18n.js`：界面翻译；新增 UI 文本应沿用现有国际化机制并补充翻译。
-- `src/server/self-hosted/server.js`：Node.js HTTP 服务入口，根据数据库环境变量选择 LokiJS 或 MongoDB 实现。
-- `src/server/self-hosted/index.js` 与 `mongo.js`：两种数据库下的业务实现；修改共同功能时检查两者是否需要同步。
+- `src/server/self-hosted/server.js`：Node.js HTTP 服务入口，使用 LokiJS 存储数据。
+- `src/server/self-hosted/index.js`：后端业务实现及 LokiJS 数据读写，当前仅支持这一种数据库。
 - `src/server/self-hosted/utils/`：self-hosted 使用的本地公共代码。
 - 前后端通过事件名（如 `COMMENT_SUBMIT`、`GET_CONFIG`）交互，服务端通过事件分发执行处理函数。
 - `Dockerfile` 和 `src/server/pkg/`：当前仍依赖已发布的 `tkserver`，源码重组时需要检查这些发布入口。
