@@ -1,17 +1,14 @@
-import { marked } from '../lib/marked/marked'
+import { Marked } from 'marked'
 
-/**
- * https://marked.js.org/#/USING_ADVANCED.md
- */
-marked.setOptions({
-  renderer: new marked.Renderer(),
+const marked = new Marked({
   gfm: true,
-  tables: true,
   breaks: true,
-  pedantic: false,
-  smartLists: true,
-  smartypants: true
+  async: false
 })
+
+function escapeAttribute (value) {
+  return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
 
 // Comment UIs rarely use indented (4-space) code blocks, but users often
 // prefix lines with spaces for visual indentation — which Markdown would
@@ -21,7 +18,30 @@ marked.use({
     code () {
       return undefined
     }
-  }
+  },
+  renderer: {
+    image (token) {
+      if (!token.owo) return false
+      return `<img class="tk-owo-emotion" src="${escapeAttribute(token.href)}" alt="${escapeAttribute(token.text)}">`
+    }
+  },
+  extensions: [{
+    name: 'owo',
+    level: 'inline',
+    start (src) {
+      return src.indexOf(':')
+    },
+    tokenizer (src) {
+      if (this.lexer.state.inRawBlock) return
+      const match = /^:([^\s:]+):/.exec(src)
+      const images = this.lexer.options.odata
+      if (!match || !images || !Object.prototype.hasOwnProperty.call(images, match[1])) return
+      const url = images[match[1]]
+      if (typeof url !== 'string' || !url) return
+      // 标准图片 token 让外层 Markdown 图片的 alt 使用纯文本渲染。
+      return { type: 'image', raw: match[0], href: url, text: match[0], owo: true }
+    }
+  }]
 })
 
 export default marked

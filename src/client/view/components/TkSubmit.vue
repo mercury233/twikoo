@@ -257,7 +257,7 @@ export default {
     },
     updatePreview () {
       if (this.isPreviewing) {
-        this.commentHtml = sanitizeHtml(marked(this.comment))
+        this.commentHtml = sanitizeHtml(marked.parse(this.comment))
         this.$nextTick(() => {
           renderLinks(this.$refs['comment-preview'])
           renderMath(this.$refs['comment-preview'], this.$twikoo.katex)
@@ -277,7 +277,7 @@ export default {
           ua: await getUserAgent(),
           url: getUrl(this.$twikoo.path),
           href: getHref(this.$twikoo.href),
-          comment: marked(this.comment),
+          comment: marked.parse(this.comment),
           pid: this.pid ? this.pid : this.replyId,
           rid: this.replyId
         }

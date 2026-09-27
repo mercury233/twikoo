@@ -14,7 +14,6 @@ module.exports = [
       'pnpm-lock.yaml',
       'Dockerfile',
       'Spacefile',
-      'src/client/lib/marked/**',
       'src/server/self-hosted/data/**',
       'src/server/pkg/dist/**',
       'src/server/pkg/patches/**',
