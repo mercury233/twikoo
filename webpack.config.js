@@ -14,6 +14,12 @@ const banner =
 
 function getConfig () {
   return {
+    resolve: {
+      alias: {
+        // 统一项目的 ESM 导入和 Element UI 的 CommonJS 引用，避免打包两份 Vue。
+        'vue$': 'vue/dist/vue.runtime.esm.js'
+      }
+    },
     module: {
       rules: [
         { test: /\.vue$/, loader: 'vue-loader' },
@@ -25,7 +31,7 @@ function getConfig () {
         },
         { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
         { test: /\.svg$/, loader: 'svg-inline-loader' },
-        { test: /\.js$/, exclude: /node_modules[\\/](webpack|webpack-dev-server|webpack-cli)[\\/]/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-modules-commonjs', '@babel/transform-runtime'] } } }
+        { test: /\.js$/, exclude: /node_modules[\\/](webpack|webpack-dev-server|webpack-cli)[\\/]/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'], plugins: ['@babel/transform-runtime'] } } }
       ]
     },
     entry: {
