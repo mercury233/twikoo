@@ -1,8 +1,7 @@
-# https://docs.docker.com/compose/compose-file/compose-file-v3/
-version: '3'
 services:
   twikoo-service:
-    image: imaegoo/twikoo
+    build: .
+    image: mercury233/twikoo:local
     environment:
       TWIKOO_THROTTLE: 250
       TZ: Asia/Shanghai

@@ -1,0 +1,10 @@
+**
+!src/
+!src/server/
+!src/server/self-hosted/
+!src/server/self-hosted/package.json
+!src/server/self-hosted/package-lock.json
+!src/server/self-hosted/server.js
+!src/server/self-hosted/index.js
+!src/server/self-hosted/utils/
+!src/server/self-hosted/utils/**
