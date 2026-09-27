@@ -9,3 +9,7 @@ updates:
         versions: [">= 3.0.0"]
       - dependency-name: "vue-loader"
         versions: [">= 16.0.0"]
+  - package-ecosystem: "npm"
+    directory: "/src/server/self-hosted"
+    schedule:
+      interval: "weekly"
