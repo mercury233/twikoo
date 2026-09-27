@@ -367,32 +367,6 @@ const fn = {
       throw new Error('极验验证码检测失败: ' + e.message)
     }
   },
-  async checkCapCaptcha ({ capToken, capSecretKey, capApiEndpoint, cap }) {
-    try {
-      // 内嵌 Cap：直接 validateToken，无需外部 Standalone
-      if (cap) {
-        const { validateToken } = require('./cap')
-        const ok = await validateToken(cap, capToken)
-        if (!ok) throw new Error('验证码错误')
-        return
-      }
-      // 外部 Cap Standalone：HTTP siteverify
-      const endpoint = capApiEndpoint.replace(/\/$/, '')
-      const url = `${endpoint}/siteverify`
-      logger.log('Cap验证码验证URL:', url)
-      logger.log('Cap验证码验证参数:', { secret: capSecretKey ? '***' : undefined, response: capToken.substring(0, 20) + '...' })
-      const { data } = await axios.post(url, {
-        secret: capSecretKey,
-        response: capToken
-      }, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      logger.log('Cap验证码检测结果', data)
-      if (!data.success) throw new Error(data.error || '验证码错误')
-    } catch (e) {
-      throw new Error('Cap验证码检测失败: ' + e.message)
-    }
-  },
   async getConfig ({ config, VERSION, isAdmin }) {
     // 构建对外配置，避免在启用某一验证码供应商时泄露另一个供应商的 key
     const baseConfig = {
@@ -430,15 +404,6 @@ const fn = {
     // 仅在明确指定使用 Geetest 时下发 Geetest 的 id
     if (config.CAPTCHA_PROVIDER === 'Geetest') {
       baseConfig.GEETEST_CAPTCHA_ID = config.GEETEST_CAPTCHA_ID
-    }
-
-    // Cap：有外部 endpoint 则下发；否则标记 builtin，前端走 twikoo 事件代理
-    if (config.CAPTCHA_PROVIDER === 'Cap') {
-      if (config.CAP_API_ENDPOINT) {
-        baseConfig.CAP_API_ENDPOINT = config.CAP_API_ENDPOINT
-      } else {
-        baseConfig.CAP_BUILTIN = true
-      }
     }
 
     return {

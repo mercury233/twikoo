@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/mercury233/twikoo#readme",
   "dependencies": {
-    "@cap.js/server": "^4.0.5",
     "@imaegoo/node-ip2region": "^2.1.1",
     "@xsai/generate-text": "0.2.2",
     "akismet-api": "^5.1.0",

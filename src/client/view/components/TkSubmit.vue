@@ -45,7 +45,6 @@
         <div class="tk-turnstile" ref="turnstile"></div>
       </div>
       <div class="tk-geetest-container" ref="geetest-container" v-show="captchaProvider === 'Geetest'"></div>
-      <div class="tk-cap-container" ref="cap-container" v-show="captchaProvider === 'Cap'"></div>
     </div>
     <div class="tk-preview-container" v-if="isPreviewing" v-html="commentHtml" ref="comment-preview"></div>
   </div>
@@ -102,7 +101,6 @@ export default {
       turnstileLoad: null,
       geeTestLoad: null,
       geeTestCaptchaObj: null,
-      capLoad: null,
       iconMarkdown,
       iconEmotion,
       iconImage
@@ -113,7 +111,6 @@ export default {
       if (typeof this.config.CAPTCHA_PROVIDER !== 'undefined') return this.config.CAPTCHA_PROVIDER
       if (this.config.TURNSTILE_SITE_KEY) return 'Turnstile'
       if (this.config.GEETEST_CAPTCHA_ID) return 'Geetest'
-      if (this.config.CAP_API_ENDPOINT || this.config.CAP_BUILTIN) return 'Cap'
       return ''
     },
     showImage () {
@@ -241,101 +238,6 @@ export default {
         })
       })
     },
-    initCap () {
-      if (this.captchaProvider !== 'Cap') return
-      if (!this.config.CAP_API_ENDPOINT && !this.config.CAP_BUILTIN) return
-      // 内嵌 Cap：widget 的 challenge/redeem 经 Twikoo 事件转发
-      if (this.config.CAP_BUILTIN) {
-        window.CAP_CUSTOM_FETCH = async (url, options = {}) => {
-          const path = String(url)
-          const body = options.body ? JSON.parse(options.body) : {}
-          try {
-            if (path.includes('challenge')) {
-              const res = await call('CAP_CHALLENGE')
-              const result = res.result || res
-              if (result.code && result.code !== 0) {
-                return { ok: false, json: async () => ({ error: result.message || 'challenge_failed' }) }
-              }
-              return {
-                ok: true,
-                json: async () => ({
-                  challenge: result.challenge,
-                  token: result.token,
-                  expires: result.expires
-                })
-              }
-            }
-            if (path.includes('redeem')) {
-              const res = await call('CAP_REDEEM', body)
-              const result = res.result || res
-              if (result.code && result.code !== 0 && result.success !== true) {
-                return {
-                  ok: true,
-                  json: async () => ({
-                    success: false,
-                    error: result.message || result.error || 'redeem_failed'
-                  })
-                }
-              }
-              return {
-                ok: true,
-                json: async () => ({
-                  success: result.success,
-                  token: result.token,
-                  expires: result.expires,
-                  message: result.message,
-                  error: result.error || result.message
-                })
-              }
-            }
-            return { ok: false, json: async () => ({ error: 'unknown_cap_path' }) }
-          } catch (e) {
-            return { ok: false, json: async () => ({ error: e.message || 'cap_fetch_failed' }) }
-          }
-        }
-      }
-      if (window.Cap || customElements.get('cap-widget')) {
-        this.capLoad = Promise.resolve()
-        return
-      }
-      this.capLoad = new Promise((resolve, reject) => {
-        const scriptEl = document.createElement('script')
-        scriptEl.src = 'https://cdn.jsdmirror.com/npm/@cap.js/widget'
-        scriptEl.onload = resolve
-        scriptEl.onerror = reject
-        this.$refs['cap-container'].appendChild(scriptEl)
-      })
-    },
-    getCapToken () {
-      return new Promise((resolve, reject) => {
-        this.capLoad.then(() => {
-          const capWidget = document.createElement('cap-widget')
-          capWidget.setAttribute('id', 'cap-widget')
-          // 内嵌：endpoint 任意非空，实际请求走 CAP_CUSTOM_FETCH
-          const endpoint = this.config.CAP_BUILTIN
-            ? '/'
-            : this.config.CAP_API_ENDPOINT
-          capWidget.setAttribute('data-cap-api-endpoint', endpoint)
-          this.$refs['cap-container'].appendChild(capWidget)
-          const cleanup = () => {
-            if (capWidget && capWidget.parentNode) {
-              capWidget.parentNode.removeChild(capWidget)
-            }
-          }
-          capWidget.solve().then((result) => {
-            cleanup()
-            if (result.success) {
-              resolve(result.token)
-            } else {
-              reject(new Error('Cap验证失败'))
-            }
-          }).catch((e) => {
-            cleanup()
-            reject(e)
-          })
-        }).catch(reject)
-      })
-    },
     onMetaUpdate (updates) {
       this.nick = updates.meta.nick
       this.mail = updates.meta.mail
@@ -391,9 +293,6 @@ export default {
           comment.geeTestCaptchaOutput = geeTestResult.geeTestCaptchaOutput
           comment.geeTestPassToken = geeTestResult.geeTestPassToken
           comment.geeTestGenTime = geeTestResult.geeTestGenTime
-        }
-        if (this.captchaProvider === 'Cap' && (this.config.CAP_API_ENDPOINT || this.config.CAP_BUILTIN)) {
-          comment.capToken = await this.getCapToken()
         }
         const sendResult = await call('COMMENT_SUBMIT', comment)
         if (sendResult && sendResult.result && sendResult.result.id) {
@@ -565,7 +464,6 @@ export default {
     this.onBgImgChange()
     this.initTurnstile()
     this.initGeeTest()
-    this.initCap()
   },
   watch: {
     'config.SHOW_EMOTION': function () {
@@ -580,13 +478,9 @@ export default {
     'config.GEETEST_CAPTCHA_ID': function () {
       this.initGeeTest()
     },
-    'config.CAP_API_ENDPOINT': function () {
-      this.initCap()
-    },
     captchaProvider: function () {
       this.initTurnstile()
       this.initGeeTest()
-      this.initCap()
     }
   }
 }
@@ -664,12 +558,6 @@ export default {
   flex-direction: column;
 }
 .tk-geetest-container {
-  position: absolute;
-  right: 0;
-  bottom: -75px;
-  z-index: 1;
-}
-.tk-cap-container {
   position: absolute;
   right: 0;
   bottom: -75px;

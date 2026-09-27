@@ -33,20 +33,12 @@ const {
   preCheckSpam,
   checkTurnstileCaptcha,
   checkGeeTestCaptcha,
-  checkCapCaptcha,
   getConfig,
   getConfigForAdmin,
   validate,
   validateClientFields,
   checkCommentOwnership
 } = require('./utils')
-const {
-  createCap,
-  mongoStorage,
-  createChallenge,
-  redeemChallenge,
-  isBuiltinCap
-} = require('./utils/cap')
 const {
   jsonParse,
   commentImportValine,
@@ -162,12 +154,6 @@ module.exports = async (request, response) => {
         break
       case 'COMMENT_EXPORT_FOR_ADMIN': // >= 1.6.13
         res = await commentExportForAdmin(event)
-        break
-      case 'CAP_CHALLENGE':
-        res = await capChallenge()
-        break
-      case 'CAP_REDEEM':
-        res = await capRedeem(event)
         break
       default:
         if (event.event) {
@@ -877,25 +863,6 @@ async function checkCaptcha (comment, request) {
       geeTestPassToken: comment.geeTestPassToken,
       geeTestGenTime: comment.geeTestGenTime
     })
-  } else if (provider === 'Cap' && isBuiltinCap(config)) {
-    if (!comment.capToken) {
-      throw new Error('验证码 token 缺失，请刷新页面重试')
-    }
-    await checkCapCaptcha({
-      capToken: comment.capToken,
-      cap: createCap(mongoStorage(db))
-    })
-  } else if (provider === 'Cap' && config.CAP_API_ENDPOINT && config.CAP_SECRET_KEY) {
-    if (!comment.capToken) {
-      throw new Error('验证码 token 缺失，请刷新页面重试')
-    }
-    await checkCapCaptcha({
-      capToken: comment.capToken,
-      capSecretKey: config.CAP_SECRET_KEY,
-      capApiEndpoint: config.CAP_API_ENDPOINT
-    })
-  } else if (provider === 'Cap') {
-    throw new Error('Cap 验证码配置不完整：内嵌模式无需额外配置，外部模式需填写 CAP_API_ENDPOINT 与 CAP_SECRET_KEY')
   } else if (provider) {
     throw new Error(`不支持的验证码类型: ${provider}`)
   }
@@ -1124,7 +1091,7 @@ function isAdmin (accessToken) {
 
 // 建立数据库 collections
 async function createCollections () {
-  const collections = ['comment', 'config', 'counter', 'cap_challenges', 'cap_tokens']
+  const collections = ['comment', 'config', 'counter']
   const res = {}
   for (const collection of collections) {
     try {
@@ -1134,22 +1101,6 @@ async function createCollections () {
     }
   }
   return res
-}
-
-async function capChallenge () {
-  if (!isBuiltinCap(config)) {
-    return { code: RES_CODE.FAIL, message: '内嵌 Cap 未启用' }
-  }
-  const data = await createChallenge(createCap(mongoStorage(db)))
-  return { code: RES_CODE.SUCCESS, ...data }
-}
-
-async function capRedeem (event) {
-  if (!isBuiltinCap(config)) {
-    return { code: RES_CODE.FAIL, message: '内嵌 Cap 未启用' }
-  }
-  const data = await redeemChallenge(createCap(mongoStorage(db)), event)
-  return { code: RES_CODE.SUCCESS, ...data }
 }
 
 function getIp (request) {
