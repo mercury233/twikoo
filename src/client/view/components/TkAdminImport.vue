@@ -8,9 +8,6 @@
     <select v-model="source">
       <option disabled value="">{{ t('ADMIN_IMPORT_SELECT') }}</option>
       <option value="valine">Valine (JSON)</option>
-      <option value="disqus">Disqus (XML)</option>
-      <option value="artalk">Artalk v1 (JSON)</option>
-      <option value="artalk2">Artalk v2 (Artrans)</option>
       <option value="twikoo">Twikoo (JSON)</option>
     </select>
     <div class="tk-admin-import-label">{{ t('ADMIN_IMPORT_SELECT_FILE') }}</div>
@@ -31,9 +28,6 @@ export default {
       logText: '',
       warnText: {
         valine: t('ADMIN_IMPORT_TIP_VALINE'),
-        disqus: t('ADMIN_IMPORT_TIP_DISQUS'),
-        artalk: t('ADMIN_IMPORT_TIP_ARTALK'),
-        artalk2: '',
         twikoo: ''
       }
     }

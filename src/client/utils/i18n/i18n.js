@@ -1398,28 +1398,6 @@ export default {
     'Đang nhập',
     'Mengimpor'
   ],
-  [S.AI + '_TIP_ARTALK']: [
-    '请上传 JSON 格式的 Artalk 导出文件，文件名通常为 comments.data.json',
-    '請上傳 JSON 格式的 Artalk 導出文件，文件名通常為 comments.data.json',
-    '請上傳 JSON 格式的 Artalk 匯出檔案，檔名通常為 comments.data.json',
-    'Please upload the Artalk export file in JSON format.The file name is usually comments.data.json',
-    'Арталк экспорт файлини ЖСОН форматида юкланг. Файл номи одатда comments.data.json бўлади.',
-    'JSON形式のArtalkエクスポートファイルをアップロードしてください。ファイル名は通常、comments.data.jsonです。',
-    'JSON 형식의 Artalk 내보내기 파일을 업로드하세요. 파일 이름은 보통 comments.data.json 입니다.',
-    'Hãy tải lên file xuất Artalk định dạng JSON. Tên file thường là comments.data.json',
-    'Silakan unggah file ekspor Artalk dalam format JSON, nama file biasanya comments.data.json'
-  ],
-  [S.AI + '_TIP_DISQUS']: [
-    '请上传 XML 格式的 Disqus 导出文件，文件名通常为 [网站名称]-[导出时间]-all.xml',
-    '請上傳 XML 格式的 Disqus 導出文件，文件名通常為 [網站名稱]-[導出時間]-all.xml',
-    '請上傳 XML 格式的 Disqus 匯出檔案，檔名通常為 [網站名稱]-[匯出時間]-all.xml',
-    'Please upload the Disqus export file in XML format. The file name is usually [website name]-[export time]-all.xml',
-    'Disqus экспорт файлини ХМЛ форматида юкланг. Файл номи одатда [веб-сайт номи]-[экспорт vaqti]-all.xml',
-    'DisqusエクスポートファイルをXML形式でアップロードしてください。ファイル名は通常、[サイト名]-[エクスポート時間]-all.xmlです。',
-    'XML 형식의 Disqus 내보내기 파일을 업로드하세요. 파일 이름은 보통 [웹사이트이름]-[내보내기시간]-all.xml 입니다.',
-    'Hãy tải lên file xuất Disqus định dạng XML. Tên file thường là [tên-website]-[thời-gian]-all.xml',
-    'Silakan unggah file ekspor Disqus dalam format XML, nama file biasanya [nama situs]-[waktu ekspor]-all.xml'
-  ],
   [S.AI + '_TIP_VALINE']: [
     '请上传 JSON 格式的 Valine 导出文件，文件名通常为 Comment.json',
     '請上傳 JSON 格式的 Valine 導出文件，文件名通常為 Comment.json',

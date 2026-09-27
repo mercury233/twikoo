@@ -39,10 +39,6 @@ module.exports = {
     const ipToRegion = require('@imaegoo/node-ip2region') // IP 属地查询
     return ipToRegion
   },
-  getMarked () {
-    const marked = require('marked') // Markdown 解析
-    return marked
-  },
   getMd5 () {
     return (message) => {
       return crypto.createHash('md5').update(String(message)).digest('hex')
@@ -61,9 +57,5 @@ module.exports = {
     // pushoo 2.0.9 的 CommonJS 导出指向缺失文件，使用其 ESM 入口。
     const { default: pushoo } = await import('pushoo')
     return pushoo
-  },
-  getXml2js () {
-    const xml2js = require('xml2js') // XML 解析
-    return xml2js
   }
 }

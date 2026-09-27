@@ -39,10 +39,8 @@
     "html-to-text": "^9.0.5",
     "jsdom": "^22.1.0",
     "lokijs": "^1.5.12",
-    "marked": "^4.0.12",
     "mongodb": "^6.3.0",
     "nodemailer": "^9.0.5",
-    "pushoo": "^2.0.9",
-    "xml2js": "^0.6.0"
+    "pushoo": "^2.0.9"
   }
 }

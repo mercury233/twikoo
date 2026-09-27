@@ -15,8 +15,7 @@ const {
   getHtmlToText,
   getDomPurify,
   getMd5,
-  getSha256,
-  getXml2js
+  getSha256
 } = require('./utils/lib')
 const {
   getFuncVersion,
@@ -46,9 +45,6 @@ const {
 const {
   jsonParse,
   commentImportValine,
-  commentImportDisqus,
-  commentImportArtalk,
-  commentImportArtalk2,
   commentImportTwikoo
 } = require('./utils/import')
 const { postCheckSpam } = require('./utils/spam')
@@ -60,7 +56,6 @@ const htmlToText = getHtmlToText()
 const DOMPurify = getDomPurify()
 const md5 = getMd5()
 const sha256 = getSha256()
-const xml2js = getXml2js()
 
 // 常量 / constants
 const { RES_CODE, MAX_REQUEST_TIMES } = require('./utils/constants')
@@ -599,27 +594,12 @@ async function commentImportForAdmin (event) {
       let comments
       switch (event.source) {
         case 'valine': {
-          const valineDb = await readFile(event.file, 'json', log)
+          const valineDb = await readFile(event.file, log)
           comments = await commentImportValine(valineDb, log)
           break
         }
-        case 'disqus': {
-          const disqusDb = await readFile(event.file, 'xml', log)
-          comments = await commentImportDisqus(disqusDb, log)
-          break
-        }
-        case 'artalk': {
-          const artalkDb = await readFile(event.file, 'json', log)
-          comments = await commentImportArtalk(artalkDb, log)
-          break
-        }
-        case 'artalk2': {
-          const artalkDb = await readFile(event.file, 'json', log)
-          comments = await commentImportArtalk2(artalkDb, log)
-          break
-        }
         case 'twikoo': {
-          const twikooDb = await readFile(event.file, 'json', log)
+          const twikooDb = await readFile(event.file, log)
           comments = await commentImportTwikoo(twikooDb, log)
           break
         }
@@ -661,17 +641,12 @@ async function commentExportForAdmin (event) {
 }
 
 // 读取文件并转为 js object
-async function readFile (file, type, log) {
+async function readFile (file, log) {
   try {
     let content = file.toString('utf8')
     log('评论文件读取成功')
-    if (type === 'json') {
-      content = jsonParse(content)
-      log('评论文件 JSON 解析成功')
-    } else if (type === 'xml') {
-      content = await xml2js.parseStringPromise(content)
-      log('评论文件 XML 解析成功')
-    }
+    content = jsonParse(content)
+    log('评论文件 JSON 解析成功')
     return content
   } catch (e) {
     log(`评论文件读取失败：${e.message}`)
