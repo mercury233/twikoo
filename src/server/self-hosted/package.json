@@ -1,6 +1,6 @@
 {
-  "name": "tkserver",
-  "version": "1.7.24",
+  "name": "@mercury233/tkserver",
+  "version": "1.0.0",
   "description": "A simple comment system.",
   "keywords": [
     "twikoo",
@@ -9,7 +9,11 @@
     "comment-system"
   ],
   "author": "imaegoo <hello@imaegoo.com> (https://github.com/imaegoo)",
+  "contributors": [
+    "Mercury233 <me@mercury233.me> (https://github.com/mercury233)"
+  ],
   "license": "MIT",
+  "private": true,
   "main": "server.js",
   "bin": {
     "tkserver": "server.js"
@@ -20,18 +24,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/twikoojs/twikoo.git"
+    "url": "https://github.com/mercury233/twikoo.git",
+    "directory": "src/server/self-hosted"
   },
-  "homepage": "https://twikoo.js.org",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
+  "homepage": "https://github.com/mercury233/twikoo#readme",
   "dependencies": {
+    "@cap.js/server": "^4.0.5",
+    "@imaegoo/node-ip2region": "^2.1.1",
+    "@xsai/generate-text": "0.2.2",
+    "akismet-api": "^5.1.0",
+    "axios": "^1.6.2",
+    "bowser": "^2.11.0",
+    "dompurify": "^3.4.14",
+    "form-data": "^4.0.0",
     "get-user-ip": "^1.0.1",
+    "html-to-text": "^9.0.5",
+    "jsdom": "^22.1.0",
     "lokijs": "^1.5.12",
+    "marked": "^4.0.12",
     "mongodb": "^6.3.0",
-    "twikoo-func": "1.7.24",
-    "uuid": "^8.3.2"
+    "nodemailer": "^9.0.5",
+    "pushoo": "^2.0.9",
+    "tencentcloud-sdk-nodejs-tms": "^4.1.293",
+    "uuid": "^8.3.2",
+    "xml2js": "^0.6.0"
   }
 }
