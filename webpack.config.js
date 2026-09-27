@@ -18,6 +18,12 @@ function getConfig ({ extractCss }) {
     module: {
       rules: [
         { test: /\.vue$/, loader: 'vue-loader' },
+        {
+          test: /\.vue$/,
+          resourceQuery: /^$/,
+          enforce: 'post',
+          loader: path.resolve(__dirname, 'loaders/vue-style-imports.js')
+        },
         extractCss
           ? { test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader'] }
           : { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
