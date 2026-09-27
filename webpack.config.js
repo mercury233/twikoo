@@ -6,14 +6,13 @@ const ROOT_PATH = path.resolve(__dirname)
 const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 const version = require('./package.json').version
 const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const banner =
   'Twikoo v' + version + '\n' +
   '(c) 2020-' + new Date().getFullYear() + ' iMaeGoo\n' +
   'Released under the MIT License.\n' +
   'Last Update: ' + (new Date()).toLocaleString()
 
-function getConfig ({ extractCss }) {
+function getConfig () {
   return {
     module: {
       rules: [
@@ -24,9 +23,7 @@ function getConfig ({ extractCss }) {
           enforce: 'post',
           loader: path.resolve(__dirname, 'loaders/vue-style-imports.js')
         },
-        extractCss
-          ? { test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader'] }
-          : { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
+        { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
         { test: /\.svg$/, loader: 'svg-inline-loader' },
         { test: /\.js$/, exclude: /node_modules[\\/](webpack|webpack-dev-server|webpack-cli)[\\/]/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-modules-commonjs', '@babel/transform-runtime'] } } }
       ]
@@ -36,7 +33,7 @@ function getConfig ({ extractCss }) {
     },
     output: {
       path: BUILD_PATH,
-      filename: extractCss ? '[name].nocss.js' : '[name].min.js',
+      filename: '[name].min.js',
       library: 'twikoo',
       libraryTarget: 'umd',
       globalObject: 'this'
@@ -50,7 +47,6 @@ function getConfig ({ extractCss }) {
         ]
       }),
       new VueLoaderPlugin(),
-      new MiniCssExtractPlugin(),
       new TerserPlugin({
         parallel: 4,
         terserOptions: {
@@ -79,9 +75,4 @@ function getConfig ({ extractCss }) {
   }
 }
 
-module.exports = process.env.NODE_ENV === 'production'
-  ? [
-      getConfig({ extractCss: false }),
-      getConfig({ extractCss: true })
-    ]
-  : getConfig({ extractCss: false })
+module.exports = getConfig()

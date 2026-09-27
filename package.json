@@ -42,7 +42,6 @@
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^9.33.0",
     "js-sha256": "^1.0.0",
-    "mini-css-extract-plugin": "^2.6.1",
     "neostandard": "^0.13.0",
     "svg-inline-loader": "^0.8.2",
     "terser-webpack-plugin": "^5.2.5",
