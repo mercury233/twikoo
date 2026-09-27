@@ -15,8 +15,8 @@
             <select v-if="setting.options" v-model="setting.value" class="tk-admin-config-select">
               <option v-for="opt in setting.options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
             </select>
-            <el-input v-else-if="setting.type === 'textarea'" v-model="setting.value" type="textarea" :rows="5" :placeholder="setting.ph" size="small" />
-            <el-input v-else v-model="setting.value" :placeholder="setting.ph" size="small" :show-password="setting.secret" />
+            <tk-input v-else-if="setting.type === 'textarea'" v-model="setting.value" type="textarea" :rows="5" :placeholder="setting.ph" size="small" />
+            <tk-input v-else v-model="setting.value" :placeholder="setting.ph" size="small" :show-password="setting.secret" />
           </div>
           <div></div>
           <div class="tk-admin-config-desc">{{ setting.desc }}</div>
@@ -27,17 +27,17 @@
         <div class="tk-admin-config-email-test">
           <div class="tk-admin-config-email-test-desc">{{ t('ADMIN_CONFIG_EMAIL_TEST_HELP') }}</div>
           <div class="tk-admin-config-input">
-            <el-input v-model="emailTestAddress" size="small">
-              <el-button slot="append" type="info" @click="testEmail">{{ t('ADMIN_CONFIG_EMAIL_TEST_BTN') }}</el-button>
-            </el-input>
+            <tk-input v-model="emailTestAddress" size="small">
+              <tk-button slot="append" type="info" @click="testEmail">{{ t('ADMIN_CONFIG_EMAIL_TEST_BTN') }}</tk-button>
+            </tk-input>
           </div>
           <div class="tk-admin-config-email-test-desc">{{ t('ADMIN_CONFIG_EMAIL_TEST_RESULT') }}{{ emailTestResult }}</div>
         </div>
       </details>
     </div>
     <div class="tk-admin-config-actions">
-      <el-button size="small" type="primary" native-type="submit">{{ t('ADMIN_CONFIG_SAVE') }}</el-button>
-      <el-button size="small" type="info" @click="resetConfig">{{ t('ADMIN_CONFIG_RESET') }}</el-button>
+      <tk-button size="small" type="primary" native-type="submit">{{ t('ADMIN_CONFIG_SAVE') }}</tk-button>
+      <tk-button size="small" type="info" @click="resetConfig">{{ t('ADMIN_CONFIG_RESET') }}</tk-button>
     </div>
     </form>
     <div class="tk-admin-config-message">{{ message }}</div>

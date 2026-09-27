@@ -6,7 +6,7 @@
       <span>请参考&nbsp;<a href="https://twikoo.js.org/update.html" target="_blank">版本更新</a>&nbsp;进行升级</span>
     </div>
     <div class="tk-admin-comment-filter">
-      <el-input
+      <tk-input
           class="tk-admin-comment-filter-keyword"
           size="small"
           v-model="filter.keyword"
@@ -17,7 +17,7 @@
         <option value="VISIBLE">{{ t('ADMIN_COMMENT_FILTER_VISIBLE') }}</option>
         <option value="HIDDEN">{{ t('ADMIN_COMMENT_FILTER_HIDDEN') }}</option>
       </select>
-      <el-button size="small" type="primary" @click="getComments">{{ t('ADMIN_COMMENT_SEARCH') }}</el-button>
+      <tk-button size="small" type="primary" @click="getComments">{{ t('ADMIN_COMMENT_SEARCH') }}</tk-button>
     </div>
     <div class="tk-admin-comment-list" ref="comment-list">
       <div class="tk-admin-comment-item" v-for="comment in comments" :key="comment._id">
@@ -39,12 +39,12 @@
           </div>
         </div>
         <div class="tk-admin-actions">
-          <el-button size="mini" type="text" @click="handleView(comment)">{{ t('ADMIN_COMMENT_VIEW') }}</el-button>
-          <el-button size="mini" type="text" v-if="comment.isSpam" @click="handleSpam(comment, false)">{{ t('ADMIN_COMMENT_SHOW') }}</el-button>
-          <el-button size="mini" type="text" v-if="!comment.isSpam" @click="handleSpam(comment, true)">{{ t('ADMIN_COMMENT_HIDE') }}</el-button>
-          <el-button size="mini" type="text" v-if="!comment.rid && comment.top" @click="handleTop(comment, false)">{{ t('ADMIN_COMMENT_UNTOP') }}</el-button>
-          <el-button size="mini" type="text" v-if="!comment.rid && !comment.top" @click="handleTop(comment, true)">{{ t('ADMIN_COMMENT_TOP') }}</el-button>
-          <el-button size="mini" type="text" @click="handleDelete(comment)">{{ t('ADMIN_COMMENT_DELETE') }}</el-button>
+          <tk-button size="mini" type="text" @click="handleView(comment)">{{ t('ADMIN_COMMENT_VIEW') }}</tk-button>
+          <tk-button size="mini" type="text" v-if="comment.isSpam" @click="handleSpam(comment, false)">{{ t('ADMIN_COMMENT_SHOW') }}</tk-button>
+          <tk-button size="mini" type="text" v-if="!comment.isSpam" @click="handleSpam(comment, true)">{{ t('ADMIN_COMMENT_HIDE') }}</tk-button>
+          <tk-button size="mini" type="text" v-if="!comment.rid && comment.top" @click="handleTop(comment, false)">{{ t('ADMIN_COMMENT_UNTOP') }}</tk-button>
+          <tk-button size="mini" type="text" v-if="!comment.rid && !comment.top" @click="handleTop(comment, true)">{{ t('ADMIN_COMMENT_TOP') }}</tk-button>
+          <tk-button size="mini" type="text" @click="handleDelete(comment)">{{ t('ADMIN_COMMENT_DELETE') }}</tk-button>
         </div>
       </div>
     </div>

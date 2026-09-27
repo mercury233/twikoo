@@ -66,7 +66,7 @@ export default {
   height: auto;
 }
 
-/* element-ui overwrite */
+/* Element UI 已不再使用，保留类名以兼容 */
 .twikoo .el-input__inner,
 .twikoo .el-textarea__inner {
   color: currentColor;

@@ -15,8 +15,8 @@
     </select>
     <div class="tk-admin-import-label">{{ t('ADMIN_IMPORT_SELECT_FILE') }}</div>
     <input type="file" value="" ref="inputFile" />
-    <el-button size="small" @click="uploadFile" :disabled="loading">{{ t('ADMIN_IMPORT_START') }}</el-button>
-    <el-input type="textarea" :rows="10" :placeholder="t('ADMIN_IMPORT_LOG')" readonly v-model="logText" ref="logTextArea" />
+    <tk-button size="small" @click="uploadFile" :disabled="loading">{{ t('ADMIN_IMPORT_START') }}</tk-button>
+    <tk-input type="textarea" :rows="10" :placeholder="t('ADMIN_IMPORT_LOG')" readonly v-model="logText" ref="logTextArea" />
   </div>
 </template>
 

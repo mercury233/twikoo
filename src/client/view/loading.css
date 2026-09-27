@@ -1,0 +1,36 @@
+.twikoo .el-loading-parent--relative {
+  position: relative !important;
+}
+.twikoo .el-loading-mask {
+  position: absolute;
+  z-index: 2000;
+  inset: 0;
+  margin: 0;
+}
+.twikoo .el-loading-spinner {
+  position: absolute;
+  top: 50%;
+  margin-top: -21px;
+  width: 100%;
+  text-align: center;
+}
+.twikoo .el-loading-spinner .circular {
+  width: 42px;
+  height: 42px;
+  animation: tk-loading-rotate 2s linear infinite;
+}
+.twikoo .el-loading-spinner .path {
+  fill: none;
+  stroke: #409eff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  animation: tk-loading-dash 1.5s ease-in-out infinite;
+}
+@keyframes tk-loading-rotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes tk-loading-dash {
+  0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 90, 150; stroke-dashoffset: -40px; }
+  100% { stroke-dasharray: 90, 150; stroke-dashoffset: -120px; }
+}

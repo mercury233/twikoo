@@ -1,16 +1,14 @@
 import Vue from 'vue'
-import Button from 'element-ui/lib/button'
-import Input from 'element-ui/lib/input'
-import Loading from 'element-ui/lib/loading'
-import 'element-ui/lib/theme-chalk/button.css'
-import 'element-ui/lib/theme-chalk/input.css'
-import 'element-ui/lib/theme-chalk/loading.css'
+import TkButton from './components/TkButton.vue'
+import TkInput from './components/TkInput.vue'
+import { loading } from './directives'
+import './loading.css'
 import '../lib/owo.css'
 import App from './App.vue'
 
-Vue.use(Button)
-Vue.use(Input)
-Vue.use(Loading)
+Vue.component('TkButton', TkButton)
+Vue.component('TkInput', TkInput)
+Vue.directive('loading', loading)
 
 let app = null
 

@@ -13,12 +13,6 @@ const banner =
 
 function getConfig() {
   return {
-    resolve: {
-      alias: {
-        // 统一项目的 ESM 导入和 Element UI 的 CommonJS 引用，避免打包两份 Vue。
-        'vue$': 'vue/dist/vue.runtime.esm.js'
-      }
-    },
     module: {
       rules: [
         { test: /\.vue$/, loader: 'vue-loader' },

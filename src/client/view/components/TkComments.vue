@@ -33,7 +33,7 @@
         </span>
       </div>
       <div class="tk-comments-search" v-show="showSearch">
-        <el-input
+        <tk-input
           ref="searchInputRef"
           v-model="searchInput"
           size="small"
@@ -42,7 +42,7 @@
           :placeholder="t('COMMENTS_SEARCH_PLACEHOLDER')"
           @clear="clearSearch"
           @keyup.enter.native="search" />
-        <el-button size="small" type="primary" @click="search">{{ t('COMMENTS_SEARCH') }}</el-button>
+        <tk-button size="small" type="primary" @click="search">{{ t('COMMENTS_SEARCH') }}</tk-button>
       </div>
       <div class="tk-comments-no" v-if="!loading && !comments.length">
         <span v-if="!errorMessage && searchKeyword">{{ t('COMMENTS_SEARCH_NO_RESULT') }}</span>

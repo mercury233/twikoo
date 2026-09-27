@@ -4,7 +4,7 @@
       <tk-avatar :config="config" :mail="mail" :nick="nick" />
       <div class="tk-col">
         <tk-meta-input :nick="nick" :mail="mail" :link="link" @update="onMetaUpdate" :config="config" />
-        <el-input class="tk-input"
+        <tk-input class="tk-input"
             type="textarea"
             ref="textarea"
             v-model="comment"
@@ -29,18 +29,18 @@
           target="_blank"
           rel="noopener noreferrer"
           v-html="iconMarkdown"></a>
-      <el-button class="tk-cancel"
+      <tk-button class="tk-cancel"
           v-if="!!replyId"
           size="small"
-          @click="cancel">{{ t('SUBMIT_CANCEL') }}</el-button>
-      <el-button class="tk-preview"
+          @click="cancel">{{ t('SUBMIT_CANCEL') }}</tk-button>
+      <tk-button class="tk-preview"
           size="small"
-          @click="preview">{{ t('SUBMIT_PREVIEW') }}</el-button>
-      <el-button class="tk-send"
+          @click="preview">{{ t('SUBMIT_PREVIEW') }}</tk-button>
+      <tk-button class="tk-send"
           type="primary"
           size="small"
           :disabled="!canSend"
-          @click="send">{{ isSending ? t('SUBMIT_SENDING') : t('SUBMIT_SEND') }}</el-button>
+          @click="send">{{ isSending ? t('SUBMIT_SENDING') : t('SUBMIT_SEND') }}</tk-button>
       <div class="tk-turnstile-container" ref="turnstile-container" v-show="captchaProvider === 'Turnstile'">
         <div class="tk-turnstile" ref="turnstile"></div>
       </div>
@@ -54,7 +54,7 @@
 import iconMarkdown from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg'
 import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg'
 import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg'
-import Clickoutside from 'element-ui/src/utils/clickoutside'
+import { Clickoutside } from '../directives'
 import OwO from '../../lib/owo'
 import { blobToDataURL, call, getHref, getUrl, getUserAgent, initMarkedOwo, initOwoEmotions, logger, marked, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
 import TkAvatar from './TkAvatar.vue'

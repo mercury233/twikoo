@@ -11,10 +11,10 @@
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
           <form>
             <input type="hidden" />
-            <el-input class="tk-password" :placeholder="t('ADMIN_PASSWORD_PLACEHOLDER')" v-model="password" show-password @keyup.enter.native="onLogin" ref="focusme">
+            <tk-input class="tk-password" :placeholder="t('ADMIN_PASSWORD_PLACEHOLDER')" v-model="password" show-password @keyup.enter.native="onLogin" ref="focusme">
               <template slot="prepend">{{ t('ADMIN_PASSWORD') }}</template>
-              <el-button slot="append" @click="onLogin">{{ t('ADMIN_LOGIN') }}</el-button>
-            </el-input>
+              <tk-button slot="append" @click="onLogin">{{ t('ADMIN_LOGIN') }}</tk-button>
+            </tk-input>
           </form>
           <div class="tk-login-msg" v-if="loginErrorMessage">
             {{ loginErrorMessage }}
@@ -24,14 +24,14 @@
         <div class="tk-regist" v-if="!isLogin && !isSetPassword">
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
           <form>
-            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password" show-password ref="focusme">
+            <tk-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password" show-password ref="focusme">
               <template slot="prepend">{{ t('ADMIN_SET_PASSWORD') }}</template>
-            </el-input>
-            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_CONFIRM_PLACEHOLDER')" v-model="passwordConfirm" show-password>
+            </tk-input>
+            <tk-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_CONFIRM_PLACEHOLDER')" v-model="passwordConfirm" show-password>
               <template slot="prepend">{{ t('ADMIN_SET_PASSWORD_CONFIRM') }}</template>
-            </el-input>
+            </tk-input>
           </form>
-          <el-button class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}</el-button>
+          <tk-button class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}</tk-button>
           <div class="tk-login-msg" v-if="loginErrorMessage">{{ loginErrorMessage }}</div>
         </div>
         <div class="tk-panel" v-if="isLogin">

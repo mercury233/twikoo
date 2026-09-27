@@ -1904,6 +1904,28 @@ export default {
     'mục/trang',
     'entri/halaman'
   ],
+  INPUT_CLEAR: [
+    '清空',
+    '清空',
+    '清空',
+    'Clear',
+    'Tozalash',
+    'クリア',
+    '지우기',
+    'Xóa',
+    'Hapus'
+  ],
+  INPUT_SHOW_PASSWORD: [
+    '显示密码',
+    '顯示密碼',
+    '顯示密碼',
+    'Show password',
+    'Parolni ko‘rsatish',
+    'パスワードを表示',
+    '비밀번호 표시',
+    'Hiện mật khẩu',
+    'Tampilkan kata sandi'
+  ],
   SUBMIT_CANCEL: [
     '取消',
     '取消',

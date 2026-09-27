@@ -1,6 +1,6 @@
 <template>
   <div class="tk-meta-input">
-    <el-input v-for="metaInput in displayedInputs"
+    <tk-input v-for="metaInput in displayedInputs"
         :key="metaInput.key"
         :name="metaInput.name"
         :type="metaInput.type"
@@ -9,7 +9,7 @@
         size="small"
         @change="onMetaChange">
       <template slot="prepend">{{ metaInput.locale }}</template>
-    </el-input>
+    </tk-input>
   </div>
 </template>
 
