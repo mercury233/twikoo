@@ -69,10 +69,6 @@ module.exports = {
     const { default: pushoo } = await import('pushoo')
     return pushoo
   },
-  getTencentcloudTms () {
-    const tencentcloudTms = require('tencentcloud-sdk-nodejs-tms') // 腾讯云文本内容安全 SDK
-    return tencentcloudTms
-  },
   getXml2js () {
     const xml2js = require('xml2js') // XML 解析
     return xml2js

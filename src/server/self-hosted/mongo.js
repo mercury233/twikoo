@@ -8,7 +8,7 @@ const { version: VERSION } = require('./package.json')
 const MongoClient = require('mongodb').MongoClient
 const getUserIP = require('get-user-ip')
 const { URL } = require('url')
-const { v4: uuidv4 } = require('uuid') // 用户 id 生成
+const { randomUUID: uuidv4 } = require('crypto')
 const {
   getHtmlToText,
   getDomPurify,

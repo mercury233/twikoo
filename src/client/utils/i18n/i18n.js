@@ -1018,39 +1018,6 @@ export default {
     'GeeTest CAPTCHA Key',
     'Kunci GeeTest CAPTCHA'
   ],
-  [S.ACI + '_QCLOUD_SECRET_ID']: [
-    '腾讯云 secret id，用于垃圾评论检测。同时设置腾讯云和 Akismet 时，只有腾讯云会生效。注册：https://twikoo.js.org/cms.html',
-    '騰訊雲 secret id，用於垃圾評論檢測。同時設定騰訊雲和 Akismet 時，只有騰訊雲會生效。註冊：https://twikoo.js.org/cms.html',
-    '騰訊雲 Secret ID，用於垃圾留言檢測。同時設定騰訊雲和 Akismet 時，只有騰訊雲會被啟用。註冊：https://twikoo.js.org/cms.html', // 「騰訊雲」是一家網路服務提供商，不改為「騰訊雲端」。
-    'Tencent Cloud secret id for spam detection. When Tencent Cloud and Akismet are set at the same time, only Tencent Cloud will take effect. Register: https://twikoo.js.org/cms.html',
-    'Спамни аниқлаш учун Тенсент Слоуд махфий идентификатори. Тенсент Слоуд ва Акисмет бир вақтнинг ўзида ўрнатилганда, фақат Тенсент Слоуд кучга киради. Рўйхатдан ўтиш: https://twikoo.js.org/cms.html',
-    'Tencent CloudのシークレットID。スパムコメントの検出に使用されます。同時にTencent CloudとAkismetを設定した場合、Tencent Cloudのみが有効になります。登録：https://twikoo.js.org/cms.html',
-    'Tencent Cloud secret id (스팸 감지용). Tencent Cloud와 Akismet 동시 설정 시 Tencent Cloud만 적용. 등록: https://twikoo.js.org/cms.html',
-    'Tencent Cloud secret id để phát hiện spam. Khi cài cả Tencent Cloud và Akismet, chỉ Tencent Cloud có hiệu lực. Đăng ký: https://twikoo.js.org/cms.html',
-    'ID rahasia Tencent Cloud untuk deteksi spam komentar. Jika Tencent Cloud dan Akismet diatur bersamaan, hanya Tencent Cloud yang berlaku. Daftar: https://twikoo.js.org/cms.html'
-  ],
-  [S.ACI + '_QCLOUD_CMS_BIZTYPE']: [
-    '腾讯云内容安全 Biztype 名称，用于垃圾评论策略。可以自定义垃圾拦截规则',
-    '騰訊雲內容安全 Biztype 名稱，用於垃圾評論策略。可以自定義垃圾攔截規則',
-    '騰訊雲內容安全 Biztype 名稱，用於垃圾評論策略。可以自定義垃圾攔截規則', // 「騰訊雲」是一家網路服務提供商，不改為「騰訊雲端」。
-    'Tencent Cloud Content Security Biztype name for spam comment policy. Spam blocking rules can be customized',
-    'Tencent Cloud Content Security Biztype име, използвано за спам политика. Може да персонализира правилата за блокиране на спам',
-    'Tencent Cloud Content Security Biztype name スパムコメントポリシー。スパムブロックルールはカスタマイズ可能',
-    'Tencent Cloud Content Security Biztype 이름 (스팸 댓글 정책용). 스팸 차단 규칙 설정 가능.',
-    'Tên Biztype bảo mật nội dung Tencent Cloud dùng cho chính sách spam.',
-    'Nama Biztype Keamanan Konten Tencent Cloud untuk kebijakan komentar spam. Aturan pemblokiran spam dapat disesuaikan'
-  ],
-  [S.ACI + '_QCLOUD_SECRET_KEY']: [
-    '腾讯云 secret key',
-    '騰訊雲 secret key',
-    '騰訊雲 Secret Key',
-    'Tencent Cloud secret key.',
-    'Тенсент Клауд махфий калити.',
-    'Tencent Cloudのシークレットキー',
-    'Tencent Cloud Secret Key.',
-    'Tencent Cloud Secret Key.',
-    'Kunci rahasia Tencent Cloud.'
-  ],
   [S.ACI + '_PUSHOO_CHANNEL']: [
     `即时消息推送平台名称，支持：${pushooChannels.join('、')} 等`,
     `即時消息推送平台名称，支持：${pushooChannels.join('、')} 等`,

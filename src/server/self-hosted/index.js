@@ -10,7 +10,7 @@ const path = require('path')
 const Loki = require('lokijs')
 const getUserIP = require('get-user-ip')
 const Lfsa = require('lokijs/src/loki-fs-structured-adapter')
-const { v4: uuidv4 } = require('uuid') // 用户 id 生成
+const { randomUUID: uuidv4 } = require('crypto')
 const {
   getHtmlToText,
   getDomPurify,
