@@ -36,8 +36,8 @@ module.exports = {
     return DOMPurify
   },
   getIpToRegion () {
-    const ipToRegion = require('@imaegoo/node-ip2region') // IP 属地查询
-    return ipToRegion
+    const { Ip2Region } = require('ts-ip2region2') // IP 属地查询
+    return Ip2Region
   },
   getMd5 () {
     return (message) => {

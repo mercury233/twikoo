@@ -1,4 +1,5 @@
 const { URL } = require('url')
+const { isIP } = require('net')
 const {
   getAxios,
   getFormData,
@@ -15,16 +16,7 @@ const sha256 = getSha256()
 const { RES_CODE } = require('./constants')
 const logger = require('./logger')
 
-let ipRegionSearcher
-
-// IP 属地查询
-function getIpRegionSearcher () {
-  if (!ipRegionSearcher) {
-    const ipToRegion = getIpToRegion()
-    ipRegionSearcher = ipToRegion.create() // 初始化 IP 属地
-  }
-  return ipRegionSearcher
-}
+const ipRegionSearchers = {}
 
 const fn = {
   // 获取 Twikoo 后端版本
@@ -162,16 +154,30 @@ const fn = {
   getIpRegion ({ ip, detail = false }) {
     if (!ip) return ''
     try {
+      // IPv6 按 [地址]:端口 格式去除端口
+      ip = ip.trim().replace(/^\[([^\]]+)\](?::\d+)?$/, '$1')
       // 将 IPv6 格式的 IPv4 地址转换为 IPv4 格式
-      ip = ip.replace(/^::ffff:/, '')
-      // Zeabur 返回的地址带端口号，去掉端口号。TODO: 不知道该怎么去掉 IPv6 地址后面的端口号
-      ip = ip.replace(/:[0-9]*$/, '')
-      const { region } = getIpRegionSearcher().binarySearchSync(ip)
-      const [country,, province, city, isp] = region.split('|')
+      ip = ip.replace(/^::ffff:(?=\d+\.)/i, '')
+      ip = ip.replace(/^(\d{1,3}(?:\.\d{1,3}){3}):\d+$/, '$1')
+      const v4or6 = isIP(ip)
+      if (!v4or6) throw new Error('invalid ip')
+      if (!ipRegionSearchers[v4or6]) {
+        const Ip2Region = getIpToRegion()
+        ipRegionSearchers[v4or6] = new Ip2Region({
+          ipVersion: `v${v4or6}`,
+          cachePolicy: 'vectorIndex'
+        })
+      }
+      const { region } = ipRegionSearchers[v4or6].search(ip)
+      if (!region) return ''
+      const [country, province, city, isp] = region.split('|').map((value) => {
+        value = value.trim()
+        return value === '0' ? '' : value
+      })
       // 有省显示省，没有省显示国家
-      const area = province.trim() && province !== '0' ? province : country
+      const area = province || country
       if (detail) {
-        return area === city ? [city, isp].join(' ') : [area, city, isp].join(' ')
+        return (area === city ? [city, isp] : [area, city, isp]).filter(Boolean).join(' ')
       } else {
         return area.replace(/(省|市)$/, '')
       }
