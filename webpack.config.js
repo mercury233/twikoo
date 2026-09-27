@@ -5,14 +5,13 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const ROOT_PATH = path.resolve(__dirname)
 const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
 const version = require('./package.json').version
-const TerserPlugin = require('terser-webpack-plugin')
 const banner =
   'Twikoo v' + version + '\n' +
   '(c) 2020-' + new Date().getFullYear() + ' iMaeGoo\n' +
   'Released under the MIT License.\n' +
   'Last Update: ' + (new Date()).toLocaleString()
 
-function getConfig () {
+function getConfig() {
   return {
     resolve: {
       alias: {
@@ -29,9 +28,23 @@ function getConfig () {
           enforce: 'post',
           loader: path.resolve(__dirname, 'loaders/vue-style-imports.js')
         },
-        { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
+        {
+          test: /\.css$/,
+          use: [
+            'vue-style-loader',
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            {
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  plugins: [require('autoprefixer')()]
+                }
+              }
+            }
+          ]
+        },
         { test: /\.svg$/, loader: 'svg-inline-loader' },
-        { test: /\.js$/, exclude: /node_modules[\\/](webpack|webpack-dev-server|webpack-cli)[\\/]/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'], plugins: ['@babel/transform-runtime'] } } }
+        { test: /\.js$/, exclude: /node_modules[\\/](webpack|webpack-dev-server|webpack-cli)[\\/]/, use: 'babel-loader' }
       ]
     },
     entry: {
@@ -44,7 +57,7 @@ function getConfig () {
       libraryTarget: 'umd',
       globalObject: 'this'
     },
-    target: ['web', 'es5'],
+    target: 'browserslist',
     plugins: [
       new webpack.BannerPlugin(banner),
       new CopyPlugin({
@@ -52,14 +65,7 @@ function getConfig () {
           { from: 'demo/', to: './' }
         ]
       }),
-      new VueLoaderPlugin(),
-      new TerserPlugin({
-        parallel: 4,
-        terserOptions: {
-          ecma: 5,
-          toplevel: true
-        }
-      })
+      new VueLoaderPlugin()
     ],
     devServer: {
       static: [{
