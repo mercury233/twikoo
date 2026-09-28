@@ -53,9 +53,8 @@ module.exports = {
     const nodemailer = require('nodemailer') // 发送邮件
     return nodemailer
   },
-  async getPushoo () {
-    // pushoo 2.0.9 的 CommonJS 导出指向缺失文件，使用其 ESM 入口。
-    const { default: pushoo } = await import('pushoo')
+  getPushoo () {
+    const pushoo = require('pushoo').default // 即时消息通知
     return pushoo
   }
 }
