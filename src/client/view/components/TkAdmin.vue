@@ -208,7 +208,7 @@ export default {
   overflow-y: auto;
   pointer-events: all;
   color: #ffffff;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.6);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   transition: all 0.5s ease;
