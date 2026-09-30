@@ -1,25 +1,30 @@
 # Twikoo 私有部署服务端
 
-## 安装
+本 fork 仅支持 LokiJS 本地文件存储，并且不发布 npm 包。
 
-```
-npm i -g tkserver
+## 安装与启动
+
+Node.js 18 或以上；需准备 C/C++ 编译工具链，用于编译 `ts-ip2region2`。
+
+在 `src/server/self-hosted/` 目录执行：
+
+```sh
+npm ci
+node server.js
 ```
 
-## 启动
-
-```
-tkserver
-```
+默认监听 `8080`，数据写入当前工作目录下的 `data/`。
 
 ## 环境变量
 
 | 名称 | 描述 | 默认值 |
 | ---- | ---- | ---- |
-| `TWIKOO_DATA` | lokijs 数据库存储路径 | `./data` |
-| `TWIKOO_HOST` | 自定义监听的主机名或IP地址（例如 0.0.0.0 或 127.0.0.1）,设置该值则会忽略 TWIKOO_LOCALHOST_ONLY，默认值为 null 但实际行为会回退到 `::` | `null` |
+| `TWIKOO_DATA` | LokiJS 数据目录，相对路径基于启动时的工作目录 | `./data` |
+| `TWIKOO_HOST` | 自定义监听地址，优先于 `TWIKOO_LOCALHOST_ONLY` | `::` |
 | `TWIKOO_PORT` | 端口号 | `8080` |
-| `TWIKOO_THROTTLE` | IP 请求限流，当同一 IP 短时间内请求次数超过阈值将对该 IP 返回错误 | `250` |
-| `TWIKOO_LOCALHOST_ONLY` | 为`true`时只监听本地请求，使得 nginx 等服务器反代之后不暴露原始端口 | `null` |
+| `TWIKOO_THROTTLE` | 每个计数周期内同一 IP 的最大请求次数，超过则返回错误；评论提交频率另由管理面板配置 | `250` |
+| `TWIKOO_REQ_TIMES_CLEAR_TIME` | IP 请求计数统一清零的间隔，单位毫秒 | `600000` |
+| `TWIKOO_SHUTDOWN_TIMEOUT` | 关闭服务时等待连接结束的超时时间，单位毫秒 | `5000` |
+| `TWIKOO_LOCALHOST_ONLY` | 为 `true` 时监听 `localhost`，适用于同主机反代不暴露原始端口 | 未启用 |
 | `TWIKOO_LOG_LEVEL` | 日志级别，支持 `verbose` / `info` / `warn` / `error` | `info` |
-| `TWIKOO_IP_HEADERS` | 在一些特殊情况下使用，如使用了`CloudFlare CDN` 它会将请求 IP 写到请求头的 `cf-connecting-ip` 字段上，为了能够正确的获取请求 IP 你可以写成 `['headers.cf-connecting-ip']` | `[]` |
+| `TWIKOO_IP_HEADERS` | 优先读取的客户端 IP 字段，格式为 JSON 数组，例如 Cloudflare 的 `["headers.cf-connecting-ip"]` | `[]` |

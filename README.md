@@ -1,22 +1,33 @@
-<a href="https://twikoo.js.org/"><img src="./docs/static/logo.png" width="300" alt="Twikoo"></a>
+<img src="https://raw.githubusercontent.com/twikoojs/twikoo/62f9a93941f10367f13a21e2b797d49ae93bc012/docs/static/logo.png" width="300" alt="Twikoo">
 
 ----
 
-[![](https://img.shields.io/npm/v/twikoo)](https://www.npmjs.com/package/twikoo)
-[![](https://img.shields.io/bundlephobia/minzip/twikoo)](https://bundlephobia.com/result?p=twikoo)
-[![](https://img.shields.io/npm/dt/twikoo)](https://www.npmjs.com/package/twikoo)
-[![](https://data.jsdelivr.com/v1/package/npm/twikoo/badge)](https://www.jsdelivr.com/package/npm/twikoo)
-[![](https://app.cloudback.it/badge/twikoojs/twikoo)](https://cloudback.it)
-[![](https://img.shields.io/npm/l/twikoo)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 一个**简洁**、**安全**、**免费**的静态网站评论系统。<br>
-A **simple**, **safe**, **free** comment system.  
-**简体中文** | [English](./README.en.md)
+A **simple**, **safe**, **free** comment system.
+
+## 本分支修改
+
+本仓库是 mercury233 维护的 Twikoo 1.x fork，项目名为 `@mercury233/twikoo`，版本号从 `1.0.0` 重新开始；[上游](https://github.com/twikoojs/twikoo)已转向 2.x，本分支继续维护 1.x 架构。
+
+| 范围 | 修改 |
+| --- | --- |
+| 后端 | 仅保留 self-hosted + LokiJS，移除云平台部署和 MongoDB；公共代码纳入本地源码，移除 `twikoo-func`、`tkserver` 包依赖 |
+| 前端 | 保留 Vue 2 + Webpack 5，以本地组件替代 Element UI，以官方 Marked + OwO 扩展替代内置修改版 |
+| 属地查询 | 改用 `ts-ip2region2`，支持 IPv4 / IPv6；安装后端依赖需要原生扩展编译工具链 |
+| 功能裁剪 | 移除 Cloudbase 支持、Cap 验证码、腾讯云 / LLM 审核、内置代码高亮、Artalk / Disqus 导入 |
+| 构建与分发 | 统一使用 npm；前端仅输出 `twikoo.min.js`；CI 上传产物，暂不发布 npm 包或 GitHub Release |
 
 ## 特色 | Features
 
 <details>
 <summary>点击展开</summary>
+
+### 简单
+
+* 私有部署，支持 Docker 或直接运行 Node.js
+* 使用 LokiJS 本地文件存储，无需独立数据库服务
 
 ### 易用
 
@@ -27,20 +38,20 @@ A **simple**, **safe**, **free** comment system.
 * 访客填写数字 QQ 邮箱，会使用 QQ 头像作为评论头像
 * 支持评论框粘贴图片（可禁用）
 * 支持插入图片（可禁用）
+* 支持第三方图床及 S3 兼容存储
 * 支持插入表情（可禁用）
 * 支持 Ctrl + Enter 快捷回复
 * 评论框内容实时保存草稿，刷新不会丢失
 * [支持 Katex 公式](https://twikoo.js.org/faq.html#%E5%A6%82%E4%BD%95%E5%90%AF%E7%94%A8-katex-%E6%94%AF%E6%8C%81)
-* 支持按语言的代码高亮
 
 ### 安全
 
 * 隐私信息安全（通过后端控制敏感字段（邮箱、IP、环境配置等）不会泄露）
 * 支持 Akismet 垃圾评论检测（需自行注册 [akismet.com](https://akismet.com/)）
-* 支持腾讯云内容安全垃圾评论检测（需自行注册 [腾讯云内容安全](https://console.cloud.tencent.com/cms/text/overview)）
+* 支持 Turnstile、极验验证码
 * 支持人工审核模式
 * 防 XSS 注入
-* 支持限制每个 IP 每 10 分钟最多发表多少条评论
+* 支持按 IP 和全站限制每分钟评论数，以及按 IP 限制请求次数
 
 ### 即时
 
@@ -56,77 +67,87 @@ A **simple**, **safe**, **free** comment system.
 * 支持自定义评论框提示信息（placeholder）
 * 支持自定义表情列表（兼容 [OwO 的数据格式](https://cdn.jsdelivr.net/npm/owo@1.0.2/demo/OwO.json)）
 * 支持自定义【昵称】【邮箱】【网址】必填 / 选填
-* 支持自定义代码高亮主题
 
 ### 便捷管理
 
 * 内嵌式管理面板，通过密码登录，可方便地查看评论、隐藏评论、删除评论、修改配置
 * 支持隐藏管理入口，通过输入暗号显示
-* 支持从 Valine、Artalk、Disqus 导入评论
+* 支持从 Valine、Twikoo 导入评论，支持导出评论和访问计数
 
 ### 缺点
 
-* 不支持 IE
+* 不支持 IE，当前前端编译目标为 Chrome 109 及以上
+* 使用已废弃的 Vue 2
+* 与上游相比，移除基本所有云平台部署支持
 
 </details>
 
 ## 预览 | Preview
+
+以下为上游 1.x 界面截图，供参考。
 
 <details>
 <summary>点击展开</summary>
 
 ### 评论
 
-![评论](./docs/static/readme-1.png)
+![评论](https://raw.githubusercontent.com/twikoojs/twikoo/62f9a93941f10367f13a21e2b797d49ae93bc012/docs/static/readme-1.png)
 
 ### 评论管理
 
-![评论管理](./docs/static/readme-2.png)
+![评论管理](https://raw.githubusercontent.com/twikoojs/twikoo/62f9a93941f10367f13a21e2b797d49ae93bc012/docs/static/readme-2.png)
 
 ### 推送通知
 
-![推送通知](./docs/static/readme-3.jpg)
+![推送通知](https://raw.githubusercontent.com/twikoojs/twikoo/62f9a93941f10367f13a21e2b797d49ae93bc012/docs/static/readme-3.jpg)
 
 </details>
 
 ## 快速上手 | Quick Start
 
-有关详细教程，请查看[快速上手](https://twikoo.js.org/quick-start.html)
+从 [Build 工作流](https://github.com/mercury233/twikoo/actions/workflows/build.yml)对应提交的成功运行中下载并解压 artifact：
 
-<details>
-<summary>如果你想获取更新动态、建言献策、参与测试，欢迎加入讨论群：1080829142</summary>
-<img height="300" alt="1080829142" src="https://www.imaegoo.com/gallery/2020/hello-twikoo.png" />
-</details>
+| Artifact | 使用方法 |
+| --- | --- |
+| `twikoo-client` | 将 `twikoo.min.js` 放入网站静态资源目录，按下例加载 |
+| `twikoo-server` | 内含 `twikoo-server.tar` Docker 镜像；也可以直接手动部署到支持 Node.js 的环境 |
 
-<!-- ## 贡献者 | Contributors -->
+```html
+<div id="tcomment"></div>
+<script src="/js/twikoo.min.js"></script>
+<script>
+  twikoo.init({
+    envId: 'https://comments.example.com',
+    el: '#tcomment'
+  })
+</script>
+```
+
+替换脚本路径和后端地址；`envId` 必须是 HTTP(S) 地址，本地调试可用 `http://localhost:8080`。首次打开管理面板时设置管理员密码，其余选项在面板内配置。通用功能可参考[上游教程](https://twikoo.js.org/quick-start.html)，部署方式和功能差异以本文为准。
 
 ## 特别感谢 | Special Thanks
 
 图标设计：[Maemo Lee](https://www.maemo.cc)
 
-<!-- ## 捐赠 | Donate -->
-
 ## 开发 | Development
 
-如果您想在本地二次开发，可以参考以下命令：
+前端 Node.js 版本要求：`^22.18.0 || ^24.11.0 || >=26.0.0`。在仓库根目录执行：
 
 ``` sh
-yarn dev # 开发 (http://localhost:9820/demo.html)
-yarn lint # 代码检查
-yarn build # 编译 (dist/twikoo.min.js)
+npm ci
+npm run dev # 开发 (http://localhost:9820/demo.html)
+npm run lint # 代码检查
+npm run build # 编译 (dist/twikoo.min.js)
 ```
+
+前端开发服务不包含后端，需按[后端 README](./src/server/self-hosted/README.md)单独启动。
 
 如果您的改动能够帮助到更多人，欢迎提交 Pull Request！
 
 ## 国际化 | I18N
 
-支持简体中文、繁体中文、English。欢迎[提交翻译 PR](https://github.com/twikoojs/twikoo/edit/main/src/client/utils/i18n/i18n.js)。
+支持简体中文、繁体中文、英语、日语、韩语等。翻译位于 [i18n.js](./src/client/utils/i18n/i18n.js)。
 
 ## 许可 | License
 
-<details>
-<summary>MIT License</summary>
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fimaegoo%2Ftwikoo.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fimaegoo%2Ftwikoo?ref=badge_large)
-
-</details>
+[MIT License](./LICENSE)，保留上游作者及贡献者的版权声明。
