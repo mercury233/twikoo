@@ -7,6 +7,7 @@
         :placeholder="requiredFields[metaInput.key] ? t('META_INPUT_REQUIRED') : t('META_INPUT_NOT_REQUIRED')"
         v-model="metaData[metaInput.key]"
         size="small"
+        @input="updateMeta"
         @change="onMetaChange">
       <template slot="prepend">{{ metaInput.locale }}</template>
     </tk-input>
