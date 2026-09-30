@@ -33,7 +33,7 @@ function formatOdata (odata) {
         for (const image of item.container) {
           if (!image.text) {
             // 缺少 text 的，取 img 文件名作为 text
-            image.text = getFilename(getImgSrc(image.icon))
+            image.text = getFilename(getImg(image.icon)?.src || '')
           }
         }
       }
@@ -45,12 +45,12 @@ function formatOdata (odata) {
 }
 
 const template = document.createElement('template')
-function getImgSrc (html) {
+function getImg (html) {
   try {
     template.innerHTML = html
-    return template.content.childNodes[0].src
+    return template.content.querySelector('img')
   } catch (e) {
-    return ''
+    return null
   }
 }
 
@@ -65,9 +65,9 @@ function initMarkedOwo (odata) {
       .values(odata)
       .forEach(item => {
         item.container.forEach(img => {
-          const imgSrc = getImgSrc(img.icon)
-          if (imgSrc) {
-            imgs[img.text] = imgSrc
+          const image = getImg(img.icon)
+          if (image?.src) {
+            imgs[img.text] = { src: image.src, className: image.className }
           }
         })
       })

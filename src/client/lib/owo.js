@@ -6,6 +6,8 @@
  * Released under the MIT License.
  */
 
+import DOMPurify from 'dompurify'
+
 export default class OwO {
   constructor (option) {
     const defaultOption = {
@@ -35,39 +37,86 @@ export default class OwO {
     this.area = option.target
     this.packages = Object.keys(this.odata)
 
-    // fill in HTML
-    let html = `<div class="OwO-logo">${option.logo}</div>` +
-        '<div class="OwO-body">'
-
-    for (let i = 0; i < this.packages.length; i++) {
-      html += `<ul class="OwO-items OwO-items-${this.odata[this.packages[i]].type}" style="max-height: ${parseInt(option.maxHeight) - 53 + 'px'};">`
-
-      const opackage = this.odata[this.packages[i]].container
-      for (let i = 0; i < opackage.length; i++) {
-        const icon = opackage[i].icon.replace('<img', '<img loading="lazy"')
-        html += `<li class="OwO-item" title="${opackage[i].text}">${icon}</li>`
+    this.logo = document.createElement('div')
+    this.logo.className = 'OwO-logo'
+    this.logo.innerHTML = DOMPurify.sanitize(option.logo)
+    const body = document.createElement('div')
+    body.className = 'OwO-body'
+    const bar = document.createElement('div')
+    bar.className = 'OwO-bar'
+    this.packagesEle = document.createElement('ul')
+    this.packagesEle.className = 'OwO-packages'
+    bar.appendChild(this.packagesEle)
+    body.appendChild(bar)
+    this.container.replaceChildren(this.logo, body)
+    const template = document.createElement('template')
+    for (const name of this.packages) {
+      const opackage = this.odata[name]
+      const items = document.createElement('ul')
+      items.className = `OwO-items OwO-items-${opackage.type}`
+      items.style.maxHeight = `${parseInt(option.maxHeight) - 53}px`
+      for (const emotion of opackage.container) {
+        const item = document.createElement('li')
+        item.className = 'OwO-item'
+        item.title = emotion.text || ''
+        // 与 Markdown 表情一致，只提取首张图片的地址和类名，不挂载原始 HTML。
+        template.innerHTML = emotion.icon
+        const sourceImage = template.content.querySelector('img')
+        if (sourceImage) {
+          const image = document.createElement('img')
+          if (sourceImage.src && DOMPurify.isValidAttribute('img', 'src', sourceImage.src)) {
+            image.src = sourceImage.src
+          }
+          image.className = sourceImage.className
+          image.classList.add('tk-owo-emotion')
+          image.alt = emotion.text ? `:${emotion.text}:` : ''
+          image.loading = 'lazy'
+          item.appendChild(image)
+        } else {
+          item.textContent = emotion.icon
+        }
+        items.appendChild(item)
       }
-
-      html += '</ul>'
+      body.insertBefore(items, bar)
+      const tab = document.createElement('li')
+      const label = document.createElement('span')
+      label.textContent = name
+      tab.appendChild(label)
+      this.packagesEle.appendChild(tab)
     }
 
-    html += '<div class="OwO-bar">' +
-        '<ul class="OwO-packages">'
-
-    for (let i = 0; i < this.packages.length; i++) {
-      html += `<li><span>${this.packages[i]}</span></li>`
-    }
-
-    html += '</ul></div></div>'
-    this.container.innerHTML = html
+    this.preview = document.createElement('div')
+    this.preview.className = 'OwO-preview'
+    this.preview.hidden = true
+    this.preview.setAttribute('aria-hidden', 'true')
+    const previewImage = document.createElement('img')
+    previewImage.alt = ''
+    this.preview.appendChild(previewImage)
+    body.appendChild(this.preview)
+    body.addEventListener('pointerover', (e) => {
+      if (e.pointerType === 'touch') return
+      const image = e.target.closest('.OwO-item')?.querySelector('img.tk-owo-preview')
+      if (image) {
+        previewImage.src = image.src
+        previewImage.className = image.className
+        previewImage.classList.add('tk-owo-emotion')
+        this.preview.hidden = false
+      } else {
+        this.preview.hidden = true
+      }
+    })
+    body.addEventListener('pointerout', (e) => {
+      const item = e.target.closest('.OwO-item')
+      if (!item || !item.contains(e.relatedTarget)) this.preview.hidden = true
+    })
+    body.addEventListener('scroll', () => { this.preview.hidden = true }, true)
 
     // bind event
-    this.logo = this.container.getElementsByClassName('OwO-logo')[0]
     this.logo.addEventListener('click', () => {
       this.toggle()
     })
 
-    this.container.getElementsByClassName('OwO-body')[0].addEventListener('click', (e) => {
+    body.addEventListener('click', (e) => {
       let target = null
       if (e.target.classList.contains('OwO-item')) {
         target = e.target
@@ -77,20 +126,18 @@ export default class OwO {
       if (target) {
         const cursorPos = this.area.selectionEnd
         const areaValue = this.area.value
-        let innerHTML = target.innerHTML
-        if (innerHTML.indexOf('<img') !== -1) {
+        let text = target.textContent
+        const image = target.querySelector('img')
+        if (image) {
           if (target.title) {
-            innerHTML = ':' + target.title + ': '
+            text = ':' + target.title + ': '
           } else {
-            // 图片表情转换为 markdown
-            const start = innerHTML.indexOf('src="') + 'src="'.length
-            const end = innerHTML.indexOf('"', start)
-            if (start !== -1 && end !== -1) {
-              innerHTML = `![${target.title || ''}](${innerHTML.substring(start, end)})`
-            }
+            console.warn('This emoticon is treated as a normal image instead of tk-owo-emotion. Please set the text attribute in owo.json for proper behavior.')
+            const src = image.getAttribute('src')
+            text = src ? `![](<${src.replace(/</g, '%3C').replace(/>/g, '%3E')}>)` : ''
           }
         }
-        this.area.value = areaValue.slice(0, cursorPos) + innerHTML + areaValue.slice(cursorPos)
+        this.area.value = areaValue.slice(0, cursorPos) + text + areaValue.slice(cursorPos)
         // 手动触发 input 事件
         this.area.dispatchEvent(new InputEvent('input'))
         this.area.focus()
@@ -98,7 +145,6 @@ export default class OwO {
       }
     })
 
-    this.packagesEle = this.container.getElementsByClassName('OwO-packages')[0]
     for (let i = 0; i < this.packagesEle.children.length; i++) {
       ((index) => {
         this.packagesEle.children[i].addEventListener('click', () => {
@@ -111,6 +157,7 @@ export default class OwO {
   }
 
   toggle () {
+    this.preview.hidden = true
     if (this.container.classList.contains('OwO-open')) {
       this.container.classList.remove('OwO-open')
     } else {
@@ -119,6 +166,7 @@ export default class OwO {
   }
 
   tab (index) {
+    this.preview.hidden = true
     const itemsShow = this.container.getElementsByClassName('OwO-items-show')[0]
     if (itemsShow) {
       itemsShow.classList.remove('OwO-items-show')

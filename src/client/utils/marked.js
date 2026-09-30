@@ -22,7 +22,8 @@ marked.use({
   renderer: {
     image (token) {
       if (!token.owo) return false
-      return `<img class="tk-owo-emotion" src="${escapeAttribute(token.href)}" alt="${escapeAttribute(token.text)}">`
+      const className = ['tk-owo-emotion', token.className].filter(Boolean).join(' ')
+      return `<img class="${escapeAttribute(className)}" src="${escapeAttribute(token.href)}" alt="${escapeAttribute(token.text)}">`
     }
   },
   extensions: [{
@@ -36,10 +37,11 @@ marked.use({
       const match = /^:([^\s:]+):/.exec(src)
       const images = this.lexer.options.odata
       if (!match || !images || !Object.prototype.hasOwnProperty.call(images, match[1])) return
-      const url = images[match[1]]
+      const image = images[match[1]]
+      const url = image?.src
       if (typeof url !== 'string' || !url) return
       // 标准图片 token 让外层 Markdown 图片的 alt 使用纯文本渲染。
-      return { type: 'image', raw: match[0], href: url, text: match[0], owo: true }
+      return { type: 'image', raw: match[0], href: url, text: match[0], className: image.className, owo: true }
     }
   }]
 })

@@ -118,6 +118,30 @@
   display: block;
 }
 
+.twikoo .OwO .OwO-preview {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: max-content;
+  max-width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  padding: 8px;
+  background-color: inherit;
+  border: 1px solid rgba(144,147,153,0.31);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.twikoo .OwO .OwO-preview img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(180px, 100%);
+  max-height: min(180px, calc(40vh - 18px));
+  object-fit: contain;
+}
+
 .OwO .OwO-body .OwO-bar {
   width: 100%;
   border-top: 1px solid rgba(144,147,153,0.31);
