@@ -294,6 +294,8 @@ export default {
         const sendResult = await call('COMMENT_SUBMIT', comment)
         if (sendResult && sendResult.result && sendResult.result.id) {
           this.comment = ''
+          this.isPreviewing = false
+          this.commentHtml = ''
           this.errorMessage = ''
           this.$emit('load')
           this.saveDraft()
