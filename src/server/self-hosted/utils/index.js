@@ -5,12 +5,14 @@ const {
   getFormData,
   getBowser,
   getIpToRegion,
+  getHtmlToTextForWordCount,
   getMd5,
   getSha256
 } = require('./lib')
 const axios = getAxios()
 const FormData = getFormData()
 const bowser = getBowser()
+const htmlToTextForWordCount = getHtmlToTextForWordCount()
 const md5 = getMd5()
 const sha256 = getSha256()
 const { RES_CODE } = require('./constants')
@@ -297,7 +299,9 @@ const fn = {
     // 长度限制
     let limitLength = parseInt(config.LIMIT_LENGTH)
     if (Number.isNaN(limitLength)) limitLength = 500
-    if (limitLength && comment.length > limitLength) {
+    // TODO: 与前端基于原始 Markdown 的口径有差异
+    // TODO: 特殊构造的 HTML 可绕过 htmlToText 的输出；根本原因还是提交 HTML 的模式本身不够安全，暂时不处理
+    if (limitLength && htmlToTextForWordCount(comment).length > limitLength) {
       throw new Error('评论内容过长')
     }
     if (config.BLOCKED_WORDS) {

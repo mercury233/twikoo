@@ -11,6 +11,27 @@ module.exports = {
       ]
     })
   },
+  getHtmlToTextForWordCount () {
+    const { compile } = require('html-to-text') // HTML 转纯文本，字数统计专用
+    return compile({
+      wordwrap: false,
+      formatters: {
+        imageTextRule (elem, walk, builder) {
+          // 图片按替代文本计数，无有效替代文本的图片占10个字符
+          builder.addInline(elem.attribs.alt?.trim() || '-'.repeat(10), { noWordTransform: true })
+        },
+        horizontalRule (elem, walk, builder) {
+          // 水平分割线占10个字符，html-to-text默认输出的是45个字符
+          builder.addInline('-'.repeat(10), { noWordTransform: true })
+        }
+      },
+      selectors: [
+        { selector: 'a', options: { ignoreHref: true } },
+        { selector: 'img', format: 'imageTextRule' },
+        { selector: 'hr', format: 'horizontalRule' },
+      ]
+    })
+  },
   getAkismetClient () {
     const { AkismetClient } = require('akismet-api') // 反垃圾 API
     return AkismetClient
