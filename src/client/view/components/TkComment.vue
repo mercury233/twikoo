@@ -1,5 +1,5 @@
 <template>
-  <div class="tk-comment" :id="comment.id" :class="{ 'tk-master': comment.master }" ref="tk-comment">
+  <div class="tk-comment" :id="comment.id" :class="{ 'tk-master': comment.master }" :tabindex="config.IS_ADMIN ? 0 : null" ref="tk-comment">
     <tk-avatar :config="config"
         :nick="comment.nick"
         :avatar="comment.avatar"
@@ -18,7 +18,7 @@
           <small class="tk-time">
             <time :datetime="jsonTimestamp" :title="localeTime">{{ displayCreated }}</time>
           </small>
-          <small class="tk-actions" v-if="isLogin">
+          <small class="tk-actions" v-if="config.IS_ADMIN">
             <button v-if="comment.isSpam" @click="handleSpam(false)">{{ t('ADMIN_COMMENT_SHOW') }}</button>
             <button v-if="!comment.isSpam" @click="handleSpam(true)">{{ t('ADMIN_COMMENT_HIDE') }}</button>
             <button v-if="!comment.rid && comment.top" @click="handleTop(false)">{{ t('ADMIN_COMMENT_UNTOP') }}</button>
@@ -148,8 +148,7 @@ export default {
       isExpanded: false,
       hasExpand: false,
       isContentExpanded: false,
-      hasContentExpand: false,
-      isLogin: false
+      hasContentExpand: false
     }
   },
   props: {
@@ -327,10 +326,6 @@ export default {
     onContentCollapse () {
       this.isContentExpanded = false
     },
-    async checkAuth () {
-      // 检查用户身份
-      this.isLogin = this.$twikoo.serverConfig && this.$twikoo.serverConfig.IS_ADMIN
-    },
     handleSpam (isSpam) {
       this.setComment({ isSpam })
     },
@@ -372,7 +367,6 @@ export default {
       renderLinks(this.$refs.comment)
       renderMath(this.$refs.comment, this.$twikoo.katex)
     })
-    this.checkAuth()
   },
   watch: {
     'comment.like': {
@@ -435,7 +429,7 @@ export default {
   color: #409eff;
   cursor: pointer;
 }
-.tk-comment:hover .tk-actions {
+.tk-comment:focus-within:not(:has(.tk-comment:focus-within)) > .tk-main > .tk-row > .tk-meta > .tk-actions {
   display: inline;
 }
 .tk-extras {
