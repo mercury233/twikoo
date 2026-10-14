@@ -146,12 +146,10 @@ export default {
   padding: 0;
   height: 28px;
   text-align: center;
-  -moz-appearance: textfield;
   appearance: textfield;
 }
 .tk-pagination .el-input .el-input__inner::-webkit-inner-spin-button,
 .tk-pagination .el-input .el-input__inner::-webkit-outer-spin-button {
-  -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }

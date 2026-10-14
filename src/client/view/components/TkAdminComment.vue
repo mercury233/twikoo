@@ -266,12 +266,10 @@ export default {
   margin: 0 0.5em;
   padding: 0 0.5em;
   color: #ffffff;
-  background-color: rgba(0, 0, 0, 0.2);
+  background: none;
   border: 1px solid rgba(144,147,153,0.31);
   border-radius: 4px;
   position: relative;
-  -moz-appearance: none;
-  -webkit-appearance: none;
 }
 .tk-admin-comment-filter-type:focus {
   border-color: #409eff;

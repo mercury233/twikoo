@@ -316,13 +316,7 @@ export default {
   position: relative;
 }
 .tk-admin-config-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   background: none;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
   border-radius: 4px;
   border: 1px solid rgba(144, 147, 153, 0.31);
   box-sizing: border-box;
