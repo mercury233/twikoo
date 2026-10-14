@@ -1,21 +1,16 @@
 import { logger } from '.'
 
-function initOwoEmotion (api) {
-  return new Promise((resolve) => {
-    const xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-          const odata = formatOdata(JSON.parse(xhr.responseText))
-          resolve(odata)
-        } else {
-          logger.warn('OwO data request was unsuccessful: ' + xhr.status)
-        }
-      }
+async function initOwoEmotion (api) {
+  try {
+    const response = await fetch(api)
+    if (!response.ok && response.status !== 304) {
+      throw new Error('HTTP ' + response.status)
     }
-    xhr.open('get', api, true)
-    xhr.send(null)
-  })
+    return formatOdata(await response.json()) ?? {}
+  } catch (e) {
+    logger.warn('OwO data request failed: ', e)
+    return {}
+  }
 }
 
 async function initOwoEmotions (apis) {
