@@ -350,12 +350,19 @@ export default {
     },
     async setComment (set) {
       this.loading = true
-      await call('COMMENT_SET_FOR_ADMIN', {
+      const { result } = await call('COMMENT_SET_FOR_ADMIN', {
         id: this.comment.id,
         set
       })
       this.loading = false
-      Object.assign(this.comment, set)
+      if (result.code) {
+        alert(result.message)
+        return
+      }
+      // 确保 Vue 2 响应式系统能够检测到新增字段
+      for (const [key, value] of Object.entries(set)) {
+        this.$set(this.comment, key, value)
+      }
     }
   },
   mounted () {
