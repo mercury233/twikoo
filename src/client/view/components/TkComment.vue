@@ -23,6 +23,7 @@
             <button v-if="!comment.isSpam" @click="handleSpam(true)">{{ t('ADMIN_COMMENT_HIDE') }}</button>
             <button v-if="!comment.rid && comment.top" @click="handleTop(false)">{{ t('ADMIN_COMMENT_UNTOP') }}</button>
             <button v-if="!comment.rid && !comment.top" @click="handleTop(true)">{{ t('ADMIN_COMMENT_TOP') }}</button>
+            <button @click="onDelete(true)">{{ t('ADMIN_COMMENT_DELETE') }}</button>
           </small>
         </div>
         <tk-action :liked="liked"
@@ -35,7 +36,7 @@
             @like="onLike"
             @dislike="onDislike"
             @reply="onReply"
-            @delete="onDelete" />
+            @delete="onDelete(false)" />
       </div>
       <div class="tk-content" :class="{ 'tk-content-expand': isContentExpanded || !showContentExpand }" ref="tk-content">
         <span v-if="comment.pid">{{ t('COMMENT_REPLIED') }} <a class="tk-ruser" href="#" @click.prevent="scrollToPid(comment.pid)">@{{ comment.ruser }}</a> :</span>
@@ -271,9 +272,9 @@ export default {
       this.pid = id
       this.$emit('reply', this.comment.id)
     },
-    async onDelete () {
-      if (!confirm(t('COMMENT_DELETE_CONFIRM'))) return
-      const { result } = await call('COMMENT_DELETE_FOR_USER', {
+    async onDelete (isAdmin) {
+      if (!confirm(t(isAdmin ? 'ADMIN_COMMENT_DELETE_CONFIRM' : 'COMMENT_DELETE_CONFIRM'))) return
+      const { result } = await call(isAdmin ? 'COMMENT_DELETE_FOR_ADMIN' : 'COMMENT_DELETE_FOR_USER', {
         id: this.comment.id
       })
       if (result.code) {
