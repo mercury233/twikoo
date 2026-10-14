@@ -201,12 +201,27 @@ const popupLightbox = (event) => {
     lightbox.className = 'tk-lightbox'
     const lightboxImg = document.createElement('img')
     lightboxImg.className = 'tk-lightbox-image'
+    const centerImage = () => {
+      if (!lightboxImg.complete || !lightboxImg.naturalWidth) return
+      const { width, height } = lightboxImg.getBoundingClientRect()
+      const bounds = lightbox.getBoundingClientRect()
+      const pixelRatio = window.devicePixelRatio || 1
+      // 对齐物理像素，避免居中后的半像素定位使文字图片发虚。
+      lightboxImg.style.left = `${Math.round((bounds.width - width) / 2 * pixelRatio) / pixelRatio}px`
+      lightboxImg.style.top = `${Math.round((bounds.height - height) / 2 * pixelRatio) / pixelRatio}px`
+      lightboxImg.style.transform = 'none'
+    }
+    lightboxImg.addEventListener('load', centerImage)
     lightboxImg.src = target.src
     lightbox.appendChild(lightboxImg)
     lightbox.addEventListener('click', () => {
+      window.removeEventListener('resize', centerImage)
+      lightboxImg.removeEventListener('load', centerImage)
       document.body.removeChild(lightbox)
     })
     document.body.appendChild(lightbox)
+    window.addEventListener('resize', centerImage)
+    centerImage()
   }
 }
 
