@@ -461,7 +461,8 @@ export default {
 .tk-tag {
   display: inline-block;
   padding: 0 0.5em;
-  font-size: 0.75em;
+  font-size: max(0.75em, 12px);
+  line-height: 1.5;
   background-color: #f2f6fc;
 }
 .tk-tag-green {

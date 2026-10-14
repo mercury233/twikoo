@@ -276,6 +276,28 @@ export default {
   font-size: 1.25rem;
   font-weight: bold;
 }
+.twikoo .tk-admin-config-group > .tk-admin-config-group-title {
+  display: block;
+  list-style: none;
+  cursor: pointer;
+}
+.twikoo .tk-admin-config-group-title::-webkit-details-marker {
+  display: none;
+}
+.twikoo .tk-admin-config-group > .tk-admin-config-group-title::before {
+  content: '';
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  background-color: currentColor;
+  clip-path: polygon(20% 0, 90% 50%, 20% 100%);
+  transform: rotate(0deg);
+}
+.twikoo .tk-admin-config-group[open] > .tk-admin-config-group-title::before {
+  transform: rotate(90deg);
+}
 .tk-admin-config-item {
   display: grid;
   align-items: center;

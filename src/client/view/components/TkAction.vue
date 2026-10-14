@@ -122,7 +122,7 @@ export default {
 }
 .tk-action-count {
   margin-left: 0.25rem;
-  font-size: 0.75rem;
+  font-size: max(0.75rem, 12px);
   height: 1.5rem;
   line-height: 1.5rem;
 }

@@ -315,7 +315,7 @@ export default {
 .tk-sort-item {
   display: inline-flex;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: max(0.75rem, 12px);
   line-height: 1;
   padding: 0;
   border: 0;
@@ -335,8 +335,8 @@ export default {
   align-items: center;
   justify-content: center;
   vertical-align: middle;
-  height: 0.75rem;
-  width: 0.75rem;
+  height: 12px;
+  width: 12px;
   line-height: 0;
   flex-shrink: 0;
   cursor: pointer;

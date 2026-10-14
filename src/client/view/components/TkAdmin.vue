@@ -9,7 +9,7 @@
       <div v-if="!needUpdate">
         <div class="tk-login" v-if="!isLogin && isSetPassword">
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
-          <form>
+          <form class="tk-login-form">
             <input type="hidden" />
             <tk-input class="tk-password" :placeholder="t('ADMIN_PASSWORD_PLACEHOLDER')" v-model="password" show-password @keyup.enter.native="onLogin" ref="focusme">
               <template slot="prepend">{{ t('ADMIN_PASSWORD') }}</template>
@@ -23,7 +23,7 @@
         </div>
         <div class="tk-regist" v-if="!isLogin && !isSetPassword">
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
-          <form>
+          <form class="tk-login-form">
             <tk-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password" show-password ref="focusme">
               <template slot="prepend">{{ t('ADMIN_SET_PASSWORD') }}</template>
             </tk-input>
@@ -245,13 +245,24 @@ export default {
   box-sizing: content-box;
   color: #ffffff;
 }
+.tk-admin-close:hover {
+  opacity: 0.8;
+}
 .tk-login,
 .tk-regist {
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
   width: 100%;
   padding: 0 2rem;
+}
+.tk-login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin: 0;
 }
 .tk-login-title {
   color: #ffffff;
@@ -262,7 +273,8 @@ export default {
 .tk-password,
 .tk-login-msg {
   color: #ffffff;
-  width: 80%;
+  width: 100%;
+  max-width: 400px;
   text-align: center;
   margin-top: 1rem;
 }
@@ -289,8 +301,12 @@ export default {
 }
 .tk-panel-logout {
   color: #ffffff;
-  font-size: 1rem;
+  font-size: max(1rem, 12px);
   text-decoration: underline;
+}
+.tk-panel-logout:hover,
+.tk-panel-logout:focus {
+  color: #66b1ff;
 }
 .tk-panel .tk-tabs {
   display: flex;

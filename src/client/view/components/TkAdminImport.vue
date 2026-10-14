@@ -90,4 +90,11 @@ export default {
 .tk-admin-import .el-textarea {
   margin-top: 1em;
 }
+.twikoo .tk-admin-import select,
+.twikoo .tk-admin-import select option,
+.twikoo .tk-admin-import input[type="file"] {
+  color: #333;
+  background-color: #fff;
+  color-scheme: light;
+}
 </style>
