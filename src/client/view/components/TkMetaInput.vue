@@ -7,7 +7,7 @@
         :placeholder="requiredFields[metaInput.key] ? t('META_INPUT_REQUIRED') : t('META_INPUT_NOT_REQUIRED')"
         v-model="metaData[metaInput.key]"
         size="small"
-        @input="updateMeta"
+        @input="onMetaInput"
         @change="onMetaChange">
       <template slot="prepend">{{ metaInput.locale }}</template>
     </tk-input>
@@ -83,6 +83,9 @@ export default {
         valid: this.checkValid()
       })
     },
+    onMetaInput () {
+      this.$emit('validate', this.checkValid())
+    },
     checkValid () {
       const isValidMail = mailRegExp.test(this.metaData.mail)
       return (
@@ -142,10 +145,7 @@ export default {
     link (newVal) { this.metaData.link = newVal },
     requiredFields: {
       handler (val, oldVal) {
-        this.$emit('update', {
-          meta: this.metaData,
-          valid: this.checkValid()
-        })
+        this.$emit('validate', this.checkValid())
       },
       deep: true
     },

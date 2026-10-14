@@ -3,7 +3,7 @@
     <div class="tk-row">
       <tk-avatar :config="config" :mail="mail" :nick="nick" />
       <div class="tk-col">
-        <tk-meta-input :nick="nick" :mail="mail" :link="link" @update="onMetaUpdate" :config="config" />
+        <tk-meta-input :nick="nick" :mail="mail" :link="link" @update="onMetaUpdate" @validate="isMetaValid = $event" :config="config" />
         <tk-input class="tk-input"
             type="textarea"
             ref="textarea"
