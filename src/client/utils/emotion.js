@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify'
 import { logger } from '.'
 
 async function initOwoEmotion (api) {
@@ -42,7 +43,7 @@ function formatOdata (odata) {
 const template = document.createElement('template')
 function getImg (html) {
   try {
-    template.innerHTML = html
+    template.innerHTML = DOMPurify.sanitize(html)
     return template.content.querySelector('img')
   } catch (e) {
     return null
