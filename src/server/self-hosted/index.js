@@ -84,7 +84,7 @@ module.exports = async (request, response) => {
     // 判断客户端是否自带 accessToken，须在 anonymousSignIn 回填身份之前
     hasClientToken = !!(request.body && request.body.accessToken)
     accessToken = anonymousSignIn(request)
-    await readConfig()
+    const requestConfig = await readConfig()
     allowCors(request, response)
     if (request.method === 'OPTIONS') {
       response.status(204).end()
@@ -125,7 +125,7 @@ module.exports = async (request, response) => {
         res = await getPasswordStatus(config, VERSION)
         break
       case 'SET_PASSWORD':
-        res = await setPassword(event)
+        res = await setPassword(event, requestConfig)
         break
       case 'GET_CONFIG':
         res = await getConfig({ config, VERSION, isAdmin: isAdmin(event.accessToken) })
@@ -253,11 +253,16 @@ async function connectToDatabase () {
 }
 
 // 写入管理密码
-async function setPassword (event) {
-  const isAdminUser = isAdmin(event.accessToken)
+// 特殊：如果数据库里没有密码，非管理员可以写入，即首次使用时进行注册
+async function setPassword (event, requestConfig) {
+  // 使用本次读取结果，防止读取失败或并发请求的空配置被误判为尚未设置密码。
+  if (!requestConfig) {
+    return { code: RES_CODE.FAIL, message: '配置读取失败，请稍后重试' }
+  }
+  const isAdminUser = requestConfig.ADMIN_PASS === md5(event.accessToken)
   // 如果数据库里没有密码，则写入密码
   // 如果数据库里有密码，则只有管理员可以写入密码
-  if (config.ADMIN_PASS && !isAdminUser) {
+  if (requestConfig.ADMIN_PASS && !isAdminUser) {
     return { code: RES_CODE.PASS_EXIST, message: '请先登录再修改密码' }
   }
   const ADMIN_PASS = md5(event.password)
@@ -1057,7 +1062,7 @@ async function readConfig () {
     logger.error('读取配置失败：', e)
     await createCollections()
     config = {}
-    return config
+    return null
   }
 }
 
