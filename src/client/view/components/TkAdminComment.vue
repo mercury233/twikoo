@@ -25,7 +25,7 @@
           <span class="tk-time">{{ displayCreated(comment) }}&nbsp;</span>
           <span :title="comment.ua">{{ comment.ipRegion }}</span>
         </div>
-        <div class="tk-content" v-html="comment.comment" ref="comments"></div>
+        <div class="tk-content" v-html="comment.comment" ref="comments" @click="onContentClick"></div>
         <div class="tk-admin-warn tk-admin-security-alert" v-if="securityAlert && securityAlert.commentId === comment._id">
           <a class="tk-admin-close" href="#" @click.prevent="securityAlert = null" v-html="iconClose"></a>
           <div class="tk-admin-security-alert-message">{{ securityAlert.message }}</div>
@@ -53,7 +53,7 @@
 
 <script>
 import { app } from '../index'
-import { timeago, call, convertLink, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
+import { timeago, call, convertLink, renderLinks, renderMath, sanitizeHtml, popupLightbox, t } from '../../utils'
 import TkAvatar from './TkAvatar.vue'
 import TkPagination from './TkPagination.vue'
 import iconClose from '@fortawesome/fontawesome-free/svgs/solid/times.svg'
@@ -80,6 +80,11 @@ export default {
   },
   methods: {
     t,
+    onContentClick (event) {
+      if (this.serverConfig.LIGHTBOX === 'true') {
+        popupLightbox(event)
+      }
+    },
     displayCreated (comment) {
       return timeago(comment.created)
     },

@@ -39,7 +39,7 @@
       </div>
       <div class="tk-content" :class="{ 'tk-content-expand': isContentExpanded || !showContentExpand }" ref="tk-content">
         <span v-if="comment.pid">{{ t('COMMENT_REPLIED') }} <a class="tk-ruser" href="#" @click.prevent="scrollToPid(comment.pid)">@{{ comment.ruser }}</a> :</span>
-        <span v-html="sanitizedComment" ref="comment" @click="popupLightbox"></span>
+        <span v-html="sanitizedComment" ref="comment" @click="onContentClick"></span>
       </div>
       <div class="tk-expand-wrap" v-if="showContentExpand">
         <div class="tk-expand" @click="onContentExpand">{{ t('COMMENT_EXPAND') }}</div>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { timeago, convertLink, call, renderLinks, renderMath, sanitizeHtml, t } from '../../utils'
+import { timeago, convertLink, call, renderLinks, renderMath, sanitizeHtml, popupLightbox, t } from '../../utils'
 import TkAction from './TkAction.vue'
 import TkAvatar from './TkAvatar.vue'
 import TkSubmit from './TkSubmit.vue'
@@ -332,20 +332,9 @@ export default {
     handleTop (top) {
       this.setComment({ top })
     },
-    popupLightbox (event) {
-      if (this.$twikoo.serverConfig.LIGHTBOX !== 'true') return
-      const { target } = event
-      if (target.tagName === 'IMG' && !target.classList.contains('tk-owo-emotion')) {
-        const lightbox = document.createElement('div')
-        lightbox.className = 'tk-lightbox'
-        const lightboxImg = document.createElement('img')
-        lightboxImg.className = 'tk-lightbox-image'
-        lightboxImg.src = target.src
-        lightbox.appendChild(lightboxImg)
-        lightbox.addEventListener('click', () => {
-          document.body.removeChild(lightbox)
-        })
-        document.body.appendChild(lightbox)
+    onContentClick (event) {
+      if (this.$twikoo.serverConfig.LIGHTBOX === 'true') {
+        popupLightbox(event)
       }
     },
     async setComment (set) {

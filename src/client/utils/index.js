@@ -194,6 +194,22 @@ const renderMath = (el, options) => {
   }
 }
 
+const popupLightbox = (event) => {
+  const { target } = event
+  if (target.tagName === 'IMG' && !target.classList.contains('tk-owo-emotion')) {
+    const lightbox = document.createElement('div')
+    lightbox.className = 'tk-lightbox'
+    const lightboxImg = document.createElement('img')
+    lightboxImg.className = 'tk-lightbox-image'
+    lightboxImg.src = target.src
+    lightbox.appendChild(lightboxImg)
+    lightbox.addEventListener('click', () => {
+      document.body.removeChild(lightbox)
+    })
+    document.body.appendChild(lightbox)
+  }
+}
+
 const blobToDataURL = (blob) => {
   return new Promise((resolve) => {
     const reader = new FileReader()
@@ -232,5 +248,6 @@ export {
   readAsText,
   renderLinks,
   renderMath,
+  popupLightbox,
   blobToDataURL
 }
