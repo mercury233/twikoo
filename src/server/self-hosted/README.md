@@ -22,6 +22,7 @@ node server.js
 | `TWIKOO_DATA` | LokiJS 数据目录，相对路径基于启动时的工作目录 | `./data` |
 | `TWIKOO_HOST` | 自定义监听地址，优先于 `TWIKOO_LOCALHOST_ONLY` | `::` |
 | `TWIKOO_PORT` | 端口号 | `8080` |
+| `TWIKOO_MAX_BODY_BYTES` | HTTP 请求体最大字节数，超限返回 413 并关闭连接；必须为JS安全整数；大批量评论导入时可适当调高 | `16777216`（16 MiB） |
 | `TWIKOO_THROTTLE` | 每个计数周期内同一 IP 的最大请求次数，超过则返回错误；评论提交频率另由管理面板配置 | `250` |
 | `TWIKOO_REQ_TIMES_CLEAR_TIME` | IP 请求计数统一清零的间隔，单位毫秒 | `600000` |
 | `TWIKOO_SHUTDOWN_TIMEOUT` | 关闭服务时等待连接结束的超时时间，单位毫秒 | `5000` |

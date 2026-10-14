@@ -7,24 +7,37 @@ const twikoo = require('./index')
 const server = http.createServer()
 const sockets = new Set()
 const TWIKOO_SHUTDOWN_TIMEOUT = parseInt(process.env.TWIKOO_SHUTDOWN_TIMEOUT) || 5000
+const configuredMaxBodyBytes = Number(process.env.TWIKOO_MAX_BODY_BYTES)
+// 默认请求体上限 16 MiB
+// 默认图片大小上限 10 MiB 经 base64 编码后约为 14 MiB，需留有余量
+const TWIKOO_MAX_BODY_BYTES = Number.isSafeInteger(configuredMaxBodyBytes) && configuredMaxBodyBytes > 0
+  ? configuredMaxBodyBytes
+  : 16 * 1024 * 1024
 let isShuttingDown = false
 let shuttingDownPromise = null
 
 server.on('request', async function (request, response) {
   if (isShuttingDown) {
-    response.writeHead(503, {
-      Connection: 'close',
-      'Content-Type': 'application/json'
-    })
-    response.end(JSON.stringify({ code: 503, message: 'Twikoo server is shutting down' }))
+    await rejectRequest(request, response, 503, 'Twikoo server is shutting down')
+    return
+  }
+  if (Number(request.headers['content-length']) > TWIKOO_MAX_BODY_BYTES) {
+    await rejectRequest(request, response, 413, 'Request body too large')
     return
   }
   try {
     const buffers = []
-    for await (const chunk of request) {
+    let totalBytes = 0
+    // 默认迭代器提前退出会销毁连接，须保留连接直到 413 响应发送完毕。
+    for await (const chunk of request.iterator({ destroyOnReturn: false })) {
+      totalBytes += chunk.length
+      if (totalBytes > TWIKOO_MAX_BODY_BYTES) {
+        await rejectRequest(request, response, 413, 'Request body too large')
+        return
+      }
       buffers.push(chunk)
     }
-    request.body = JSON.parse(Buffer.concat(buffers).toString())
+    request.body = JSON.parse(Buffer.concat(buffers, totalBytes).toString())
   } catch (e) {
     request.body = {}
   }
@@ -41,6 +54,20 @@ server.on('request', async function (request, response) {
   }
   return await twikoo(request, response)
 })
+
+async function rejectRequest (request, response, code, message) {
+  request.pause()
+  try {
+    await twikoo.allowCors(request, response)
+  } catch (e) {
+    logger.error('Twikoo CORS configuration failed:', e)
+  }
+  response.writeHead(code, {
+    Connection: 'close',
+    'Content-Type': 'application/json'
+  })
+  response.end(JSON.stringify({ code, message }), () => request.destroy())
+}
 
 server.on('connection', (socket) => {
   sockets.add(socket)

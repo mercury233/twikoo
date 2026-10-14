@@ -85,7 +85,7 @@ module.exports = async (request, response) => {
     hasClientToken = !!(request.body && request.body.accessToken)
     accessToken = anonymousSignIn(request)
     const requestConfig = await readConfig()
-    allowCors(request, response)
+    await allowCors(request, response, requestConfig)
     if (request.method === 'OPTIONS') {
       response.status(204).end()
       return
@@ -183,10 +183,12 @@ module.exports = async (request, response) => {
   response.status(200).json(res)
 }
 
-function allowCors (request, response) {
+async function allowCors (request, response, requestConfig) {
   if (request.headers.origin) {
+    const corsConfig = requestConfig === undefined ? await readConfig() : requestConfig
+    if (!corsConfig) return
     response.setHeader('Access-Control-Allow-Credentials', true)
-    response.setHeader('Access-Control-Allow-Origin', getAllowedOrigin(request))
+    response.setHeader('Access-Control-Allow-Origin', getAllowedOrigin(request, corsConfig))
     response.setHeader('Access-Control-Allow-Methods', 'POST')
     response.setHeader(
       'Access-Control-Allow-Headers',
@@ -196,14 +198,14 @@ function allowCors (request, response) {
   }
 }
 
-function getAllowedOrigin (request) {
+function getAllowedOrigin (request, requestConfig) {
   const localhostRegex = /^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d{1,5})?$/
   if (localhostRegex.test(request.headers.origin)) { // 判断是否为本地主机，如是则允许跨域
     return request.headers.origin // Allow
-  } else if (config.CORS_ALLOW_ORIGIN) { // 如设置了安全域名则检查
+  } else if (requestConfig.CORS_ALLOW_ORIGIN) { // 如设置了安全域名则检查
     // 适配多条 CORS 规则
     // 以逗号分隔 CORS
-    const corsList = config.CORS_ALLOW_ORIGIN.split(',')
+    const corsList = requestConfig.CORS_ALLOW_ORIGIN.split(',')
     // 遍历 CORS 列表
     for (let i = 0; i < corsList.length; i++) {
       const cors = corsList[i].replace(/\/$/, '') // 获取当前 CORS 并去除末尾的斜杠
@@ -1155,3 +1157,4 @@ function clearRequestTimes () {
 requestTimesTimer = setInterval(clearRequestTimes, TWIKOO_REQ_TIMES_CLEAR_TIME)
 
 module.exports.shutdown = shutdown
+module.exports.allowCors = allowCors
