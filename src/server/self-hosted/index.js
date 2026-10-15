@@ -4,6 +4,10 @@
  * Released under the MIT License.
  */
 
+if (require.main === module) {
+  throw new Error('请使用 node server.js 启动服务，index.js 不是启动入口。')
+}
+
 const { version: VERSION } = require('./package.json')
 const fs = require('fs')
 const path = require('path')
