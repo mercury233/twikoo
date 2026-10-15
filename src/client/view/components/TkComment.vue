@@ -518,7 +518,7 @@ export default {
   margin-top: 1rem;
 }
 .tk-expand {
-  font-size: 0.75em;
+  font-size: max(0.75em, 12px);
 }
 .tk-lightbox {
   display: block;
