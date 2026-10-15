@@ -353,6 +353,9 @@ export default {
       for (const [key, value] of Object.entries(set)) {
         this.$set(this.comment, key, value)
       }
+      // 状态切换会移除当前按钮，将焦点交还评论以保持管理操作栏可见。
+      await this.$nextTick()
+      this.$refs['tk-comment']?.focus({ preventScroll: true })
     }
   },
   mounted () {
