@@ -986,6 +986,7 @@ async function getRecentComments (event) {
     }
     if (!event.includeReply) query.rid = { $exists: false }
     if (event.pageSize > 100) event.pageSize = 100
+    if (event.pageSize <= 0) throw new Error('pageSize must be greater than 0')
     const result = db
       .getCollection('comment')
       .chain()
