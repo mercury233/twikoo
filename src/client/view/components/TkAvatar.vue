@@ -52,6 +52,9 @@ export default {
         const hashMethod = this.gravatarCdn === 'cravatar.cn' ? md5 : sha256
         return `https://${this.gravatarCdn}/avatar/${hashMethod(normalizeMail(this.mail))}?d=${this.defaultGravatar}`
       }
+      if (this.nick) {
+        return `https://${this.gravatarCdn}/avatar/${md5(this.nick)}?d=${this.defaultGravatar}`
+      }
       return ''
     }
   },
