@@ -404,6 +404,21 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 }
+.tk-comment > .tk-main > .tk-row {
+  flex-wrap: wrap;
+}
+.tk-meta {
+  min-width: 0;
+  max-width: 100%;
+}
+.tk-meta .tk-time {
+  display: inline-block;
+  white-space: nowrap;
+}
+.tk-comment > .tk-main > .tk-row > .tk-action {
+  flex-shrink: 0;
+  margin-left: auto;
+}
 .tk-nick-link {
   color: inherit;
   text-decoration: none;
