@@ -1,21 +1,21 @@
 <template>
   <div class="tk-action">
-    <button class="tk-action-link" @click="onDelete" v-if="showDelete">
+    <button class="tk-action-link" :title="t('COMMENT_DELETE')" @click="onDelete" v-if="showDelete">
       <span class="tk-action-icon" v-html="iconDelete"></span>
       <span class="tk-action-icon tk-action-icon-solid" v-html="iconDeleteSolid"></span>
       <span class="tk-action-count"></span>
     </button>
-    <button class="tk-action-link" :class="{ 'tk-liked': liked }" @click="onLike">
+    <button class="tk-action-link" :class="{ 'tk-liked': liked }" :title="t('COMMENT_LIKE')" @click="onLike">
       <span class="tk-action-icon" v-html="iconLike"></span>
       <span class="tk-action-icon tk-action-icon-solid" v-html="iconLikeSolid"></span>
       <span class="tk-action-count">{{ likeCountStr }}</span>
     </button>
-    <button class="tk-action-link" :class="{ 'tk-disliked': disliked }" @click="onDislike" v-if="showDislike">
+    <button class="tk-action-link" :class="{ 'tk-disliked': disliked }" :title="t('COMMENT_DISLIKE')" @click="onDislike" v-if="showDislike">
       <span class="tk-action-icon" v-html="iconDislike"></span>
       <span class="tk-action-icon tk-action-icon-solid" v-html="iconDislikeSolid"></span>
       <span class="tk-action-count">{{ dislikeCountStr }}</span>
     </button>
-    <button class="tk-action-link" @click="onReply">
+    <button class="tk-action-link" :title="t('COMMENT_REPLY')" @click="onReply">
       <span class="tk-action-icon" v-html="iconComment"></span>
       <span class="tk-action-icon tk-action-icon-solid" v-html="iconCommentSolid"></span>
       <span class="tk-action-count">{{ repliesCountStr }}</span>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { t } from '../../utils'
 import iconComment from '@fortawesome/fontawesome-free/svgs/regular/comment.svg'
 import iconCommentSolid from '@fortawesome/fontawesome-free/svgs/solid/comment.svg'
 import iconLike from '@fortawesome/fontawesome-free/svgs/regular/thumbs-up.svg'
@@ -67,6 +68,7 @@ export default {
     }
   },
   methods: {
+    t,
     onLike () {
       this.$emit('like')
     },

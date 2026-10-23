@@ -1706,6 +1706,50 @@ export default {
     'Trả lời',
     'Balas'
   ],
+  COMMENT_REPLY: [
+    '回复',
+    '回覆',
+    '回覆',
+    'Reply',
+    'Жавоб бериш',
+    '返信',
+    '답글',
+    'Trả lời',
+    'Balas'
+  ],
+  COMMENT_LIKE: [
+    '点赞',
+    '讚好',
+    '按讚',
+    'Like',
+    'Ёқди',
+    '高評価',
+    '좋아요',
+    'Thích',
+    'Suka'
+  ],
+  COMMENT_DISLIKE: [
+    '点踩',
+    '不喜歡',
+    '不喜歡',
+    'Dislike',
+    'Ёқмади',
+    '低評価',
+    '싫어요',
+    'Không thích',
+    'Tidak suka'
+  ],
+  COMMENT_DELETE: [
+    '删除',
+    '刪除',
+    '移除',
+    'Delete',
+    'Ўчирмоқ',
+    '削除',
+    '삭제',
+    'Xóa',
+    'Hapus'
+  ],
   COMMENT_DELETE_CONFIRM: [
     '确认删除你的评论？',
     '確認刪除你的評論？',
