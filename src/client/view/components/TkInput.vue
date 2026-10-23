@@ -153,6 +153,10 @@ export default {
       input.style.overflowY = height > maxHeight ? 'auto' : 'hidden'
     },
     observeTextarea () {
+      if (this.resizeFrame != null) {
+        cancelAnimationFrame(this.resizeFrame)
+        this.resizeFrame = null
+      }
       if (this.resizeObserver) {
         this.resizeObserver.disconnect()
         this.resizeObserver = null
@@ -162,7 +166,12 @@ export default {
       this.resizeObserver = new ResizeObserver(([entry]) => {
         if (entry.contentRect.width !== previousWidth) {
           previousWidth = entry.contentRect.width
-          this.resizeTextarea()
+          // 延后修改高度，避免在当前观察通知周期内再次改变容器尺寸。
+          if (this.resizeFrame != null) cancelAnimationFrame(this.resizeFrame)
+          this.resizeFrame = requestAnimationFrame(() => {
+            this.resizeFrame = null
+            this.resizeTextarea()
+          })
         }
       })
       this.resizeObserver.observe(this.$el)
@@ -197,6 +206,7 @@ export default {
   },
   beforeDestroy () {
     if (this.resizeObserver) this.resizeObserver.disconnect()
+    if (this.resizeFrame != null) cancelAnimationFrame(this.resizeFrame)
   }
 }
 </script>
