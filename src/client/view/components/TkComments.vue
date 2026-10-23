@@ -88,7 +88,7 @@ export default {
       errorMessage: '',
       config: {},
       comments: [],
-      showExpand: true,
+      showExpand: false,
       count: 0,
       replyId: '',
       loadedPages: 1,
@@ -210,6 +210,7 @@ export default {
       try {
         const comments = await call('COMMENT_GET', event)
         if (requestVersion !== this.requestVersion) return false
+        this.showExpand = false
         if (comments && comments.result && comments.result.message) {
           this.errorMessage = comments.result.message
           return false
@@ -224,7 +225,10 @@ export default {
           return true
         }
       } catch (e) {
-        if (requestVersion === this.requestVersion) this.errorMessage = e.message
+        if (requestVersion === this.requestVersion) {
+          this.showExpand = false
+          this.errorMessage = e.message
+        }
       }
       return false
     },
