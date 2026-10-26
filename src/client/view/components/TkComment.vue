@@ -211,12 +211,17 @@ export default {
       }
     },
     showContentExpandIfNeed () {
+      const content = this.$refs['tk-content']
+      if (this._isDestroyed || this._isBeingDestroyed || !content) return
       // 如果已经折叠就不再判断 主要是为了防止图片在onload之前就已经折叠而导致图片在onload之后取消折叠
-      this.hasContentExpand = this.hasContentExpand || this.$refs['tk-content'].scrollHeight > 500
+      this.hasContentExpand = this.hasContentExpand || content.scrollHeight > 500
     },
     showContentExpandIfNeedAfterImagesLoaded () {
-      this.$refs['tk-content'].querySelectorAll('img').forEach((imgEl) => {
-        imgEl.onload = this.showContentExpandIfNeed
+      const content = this.$refs['tk-content']
+      if (this._isDestroyed || this._isBeingDestroyed || !content) return
+      this.contentImages = Array.from(content.querySelectorAll('img'))
+      this.contentImages.forEach((imgEl) => {
+        imgEl.addEventListener('load', this.showContentExpandIfNeed)
       })
     },
     scrollToComment () {
@@ -359,14 +364,22 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(this.showContentExpandIfNeed)
-    this.$nextTick(this.showContentExpandIfNeedAfterImagesLoaded)
-    this.$nextTick(this.showExpandIfNeed)
-    this.$nextTick(this.scrollToComment)
     this.$nextTick(() => {
+      if (this._isDestroyed || this._isBeingDestroyed) return
+      this.showContentExpandIfNeed()
+      this.showContentExpandIfNeedAfterImagesLoaded()
+      this.showExpandIfNeed()
+      this.scrollToComment()
       renderLinks(this.$refs.comment)
       renderMath(this.$refs.comment, this.$twikoo.katex)
     })
+  },
+  beforeDestroy () {
+    // 图片可能在组件销毁后才加载完成，解绑时不能再依赖已移除的 DOM 引用。
+    for (const imgEl of this.contentImages || []) {
+      imgEl.removeEventListener('load', this.showContentExpandIfNeed)
+    }
+    this.contentImages = null
   },
   watch: {
     'comment.like': {
