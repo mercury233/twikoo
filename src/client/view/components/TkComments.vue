@@ -106,6 +106,7 @@ export default {
     t,
     async initConfig () {
       const result = await call('GET_CONFIG')
+      if (this._isDestroyed || this._isBeingDestroyed) return
       if (result && result.result && result.result.config) {
         this.config = result.result.config
         Vue.prototype.$twikoo.serverConfig = result.result.config
@@ -203,6 +204,7 @@ export default {
       return this.getComments({ url, before, sort: this.currentSort, keyword: this.searchKeyword })
     },
     onCommentLoaded () {
+      if (this._isDestroyed || this._isBeingDestroyed) return
       typeof this.$twikoo.onCommentLoaded === 'function' && this.$twikoo.onCommentLoaded()
     },
     async getComments (event) {
@@ -247,6 +249,7 @@ export default {
     app.$on('configUpdated', this.refreshPreservingState)
   },
   beforeDestroy () {
+    this.requestVersion++
     app.$off('configUpdated', this.initConfig)
     app.$off('configUpdated', this.refreshPreservingState)
   }

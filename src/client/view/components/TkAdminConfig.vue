@@ -181,6 +181,7 @@ export default {
     async readConfig () {
       this.loading = true
       const res = await call('GET_CONFIG_FOR_ADMIN')
+      if (this._isDestroyed || this._isBeingDestroyed) return
       if (res.result && !res.result.code) {
         this.serverConfig = res.result.config
         if (typeof this.serverConfig.CAPTCHA_PROVIDER === 'undefined') {
@@ -241,7 +242,9 @@ export default {
       }
       logger.log('保存配置', config)
       await call('SET_CONFIG', { config })
+      if (this._isDestroyed || this._isBeingDestroyed) return
       await this.readConfig()
+      if (this._isDestroyed || this._isBeingDestroyed) return
       // Notify other components (e.g. TkComments) to refresh config
       app.$emit('configUpdated')
       this.message = '保存成功'
@@ -250,6 +253,7 @@ export default {
     async testEmail () {
       this.loading = true
       const testResult = await call('EMAIL_TEST', { mail: this.emailTestAddress })
+      if (this._isDestroyed || this._isBeingDestroyed) return
       logger.log('邮件测试', testResult)
       this.emailTestResult = JSON.stringify(testResult)
       this.loading = false

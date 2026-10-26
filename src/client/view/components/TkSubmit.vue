@@ -99,8 +99,11 @@ export default {
       mail: '',
       link: '',
       turnstileLoad: null,
+      turnstileWidgetId: null,
+      turnstileRemoveTimer: null,
       geeTestLoad: null,
       geeTestCaptchaObj: null,
+      captchaReject: null,
       iconMarkdown,
       iconEmotion,
       iconImage
@@ -149,6 +152,8 @@ export default {
     async initOwo () {
       if (this.config.SHOW_EMOTION === 'true') {
         const odata = await initOwoEmotions(this.config.EMOTION_CDN || 'https://owo.imaegoo.com/owo.json')
+        if (this._isDestroyed || this._isBeingDestroyed) return
+        if (this.owo) this.owo.destroy()
         this.owo = new OwO({
           logo: iconEmotion, // OwO button text, default: `OωO表情`
           container: this.$refs.owo, // OwO container, default: `document.getElementsByClassName('OwO')[0]`
@@ -174,26 +179,32 @@ export default {
         this.$refs['turnstile-container'].appendChild(scriptEl)
       })
     },
-    getTurnstileToken () {
+    async getTurnstileToken () {
+      await this.turnstileLoad
+      if (this._isDestroyed || this._isBeingDestroyed) return
       return new Promise((resolve, reject) => {
-        this.turnstileLoad.then(() => {
-          const widgetId = window.turnstile.render(this.$refs.turnstile, {
-            sitekey: this.config.TURNSTILE_SITE_KEY,
-            callback: (token) => {
-              resolve(token)
-              setTimeout(() => {
-                window.turnstile.remove(widgetId)
-              }, 1000)
-            },
-            'error-callback': reject,
-            'expired-callback': () => {
-              reject(new Error('验证码已过期，请重试'))
-            },
-            'timeout-callback': () => {
-              reject(new Error('验证码超时，请重试'))
-            }
-          })
+        this.captchaReject = reject
+        clearTimeout(this.turnstileRemoveTimer)
+        if (this.turnstileWidgetId !== null) window.turnstile.remove(this.turnstileWidgetId)
+        const widgetId = window.turnstile.render(this.$refs.turnstile, {
+          sitekey: this.config.TURNSTILE_SITE_KEY,
+          callback: (token) => {
+            if (this._isDestroyed || this._isBeingDestroyed) return
+            resolve(token)
+            this.turnstileRemoveTimer = setTimeout(() => {
+              window.turnstile.remove(widgetId)
+              this.turnstileWidgetId = null
+            }, 1000)
+          },
+          'error-callback': reject,
+          'expired-callback': () => {
+            reject(new Error('验证码已过期，请重试'))
+          },
+          'timeout-callback': () => {
+            reject(new Error('验证码超时，请重试'))
+          }
         })
+        this.turnstileWidgetId = widgetId
       })
     },
     initGeeTest () {
@@ -210,30 +221,38 @@ export default {
         this.$refs['geetest-container'].appendChild(scriptEl)
       })
     },
-    getGeeTestToken () {
+    async getGeeTestToken () {
+      await this.geeTestLoad
+      if (this._isDestroyed || this._isBeingDestroyed) return
       return new Promise((resolve, reject) => {
-        this.geeTestLoad.then(() => {
-          window.initGeetest4({
-            captchaId: this.config.GEETEST_CAPTCHA_ID,
-            product: 'bind',
-            language: 'zho'
-          }, (captcha) => {
-            this.geeTestCaptchaObj = captcha
-            captcha.onReady(() => {
-              captcha.showCaptcha()
-            }).onSuccess(() => {
-              const result = captcha.getValidate()
-              resolve({
-                geeTestLotNumber: result.lot_number,
-                geeTestCaptchaOutput: result.captcha_output,
-                geeTestPassToken: result.pass_token,
-                geeTestGenTime: result.gen_time
-              })
-            }).onError((e) => {
-              reject(e)
-            }).onClose(() => {
-              reject(new Error('验证已取消'))
+        this.captchaReject = reject
+        if (this.geeTestCaptchaObj) this.geeTestCaptchaObj.destroy()
+        window.initGeetest4({
+          captchaId: this.config.GEETEST_CAPTCHA_ID,
+          product: 'bind',
+          language: 'zho'
+        }, (captcha) => {
+          if (this._isDestroyed || this._isBeingDestroyed) {
+            captcha.destroy()
+            return
+          }
+          this.geeTestCaptchaObj = captcha
+          captcha.onReady(() => {
+            if (this._isDestroyed || this._isBeingDestroyed) return
+            captcha.showCaptcha()
+          }).onSuccess(() => {
+            if (this._isDestroyed || this._isBeingDestroyed) return
+            const result = captcha.getValidate()
+            resolve({
+              geeTestLotNumber: result.lot_number,
+              geeTestCaptchaOutput: result.captcha_output,
+              geeTestPassToken: result.pass_token,
+              geeTestGenTime: result.gen_time
             })
+          }).onError((e) => {
+            reject(e)
+          }).onClose(() => {
+            reject(new Error('验证已取消'))
           })
         })
       })
@@ -259,6 +278,7 @@ export default {
       if (this.isPreviewing) {
         this.commentHtml = sanitizeHtml(marked.parse(this.comment))
         this.$nextTick(() => {
+          if (this._isDestroyed || this._isBeingDestroyed) return
           renderLinks(this.$refs['comment-preview'])
           renderMath(this.$refs['comment-preview'], this.$twikoo.katex)
         })
@@ -270,11 +290,13 @@ export default {
         if (this.comment.match(new RegExp(`!\\[${t('IMAGE_UPLOAD_PLACEHOLDER')}.+\\]\\(\\)`))) {
           throw new Error(t('IMAGE_UPLOAD_PLEASE_WAIT'))
         }
+        const ua = await getUserAgent()
+        if (this._isDestroyed || this._isBeingDestroyed) return
         const comment = {
           nick: this.nick,
           mail: this.mail,
           link: this.link,
-          ua: await getUserAgent(),
+          ua,
           url: getUrl(this.$twikoo.path),
           href: getHref(this.$twikoo.href),
           comment: marked.parse(this.comment),
@@ -283,26 +305,30 @@ export default {
         }
         if (this.captchaProvider === 'Turnstile' && this.config.TURNSTILE_SITE_KEY) {
           comment.turnstileToken = await this.getTurnstileToken()
+          if (this._isDestroyed || this._isBeingDestroyed) return
         }
         if (this.captchaProvider === 'Geetest' && this.config.GEETEST_CAPTCHA_ID) {
           const geeTestResult = await this.getGeeTestToken()
+          if (this._isDestroyed || this._isBeingDestroyed) return
           comment.geeTestLotNumber = geeTestResult.geeTestLotNumber
           comment.geeTestCaptchaOutput = geeTestResult.geeTestCaptchaOutput
           comment.geeTestPassToken = geeTestResult.geeTestPassToken
           comment.geeTestGenTime = geeTestResult.geeTestGenTime
         }
         const sendResult = await call('COMMENT_SUBMIT', comment)
+        if (this._isDestroyed || this._isBeingDestroyed) return
         if (sendResult && sendResult.result && sendResult.result.id) {
           this.comment = ''
           this.isPreviewing = false
           this.commentHtml = ''
           this.errorMessage = ''
-          this.$emit('load')
           this.saveDraft()
+          this.$emit('load')
         } else {
           throw new Error(sendResult.result.message)
         }
       } catch (e) {
+        if (this._isDestroyed || this._isBeingDestroyed) return
         logger.error('评论失败', e)
         this.errorMessage = `${t('COMMENT_FAILED')}: ${e && e.message}`
       } finally {
@@ -362,6 +388,7 @@ export default {
       this.paste(this.getImagePlaceholder(fileIndex, newFileType))
       const imageCdn = this.config.IMAGE_CDN
       const compressedPhoto = await this.compressImage(photo)
+      if (this._isDestroyed || this._isBeingDestroyed) return
       if (imageCdn) {
         this.uploadPhotoToThirdParty(fileIndex, newFileName, newFileType, compressedPhoto)
       } else {
@@ -407,10 +434,13 @@ export default {
     },
     async uploadPhotoToThirdParty (fileIndex, fileName, fileType, photo) {
       try {
+        const photoData = await blobToDataURL(photo)
+        if (this._isDestroyed || this._isBeingDestroyed) return
         const { result: uploadResult } = await call('UPLOAD_IMAGE', {
           fileName,
-          photo: await blobToDataURL(photo)
+          photo: photoData
         })
+        if (this._isDestroyed || this._isBeingDestroyed) return
         if (uploadResult.data) {
           this.uploadCompleted(fileIndex, fileName, fileType, uploadResult.data.url)
         } else if (uploadResult.code === 1041) {
@@ -420,6 +450,7 @@ export default {
           this.uploadFailed(fileIndex, fileType, uploadResult.err)
         }
       } catch (e) {
+        if (this._isDestroyed || this._isBeingDestroyed) return
         console.error(e)
         this.uploadFailed(fileIndex, fileType, e.message)
       }
@@ -463,6 +494,14 @@ export default {
     this.onBgImgChange()
     this.initTurnstile()
     this.initGeeTest()
+  },
+  beforeDestroy () {
+    if (this.textarea) this.textarea.removeEventListener('paste', this.onPaste)
+    if (this.owo) this.owo.destroy()
+    if (this.captchaReject) this.captchaReject(new Error('Component destroyed'))
+    clearTimeout(this.turnstileRemoveTimer)
+    if (this.turnstileWidgetId !== null) window.turnstile.remove(this.turnstileWidgetId)
+    if (this.geeTestCaptchaObj) this.geeTestCaptchaObj.destroy()
   },
   watch: {
     'config.SHOW_EMOTION': function () {

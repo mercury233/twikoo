@@ -156,6 +156,9 @@ export default {
   mounted () {
     app.$on('initMeta', this.initMeta)
     this.initMeta()
+  },
+  beforeDestroy () {
+    app.$off('initMeta', this.initMeta)
   }
 }
 </script>

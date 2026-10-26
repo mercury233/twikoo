@@ -30,7 +30,12 @@ export default class OwO {
     }
 
     this.odata = option.odata
-    setTimeout(() => { this.init(option) })
+    this.initTimer = setTimeout(() => { this.init(option) })
+  }
+
+  destroy () {
+    clearTimeout(this.initTimer)
+    this.container.replaceChildren()
   }
 
   init (option) {

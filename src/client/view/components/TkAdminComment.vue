@@ -99,6 +99,7 @@ export default {
         keyword: this.filter.keyword,
         type: this.filter.type
       })
+      if (this._isDestroyed || this._isBeingDestroyed) return
       if (res.result && !res.result.code) {
         this.count = res.result.count
         this.comments = res.result.data.map(comment => ({
@@ -107,6 +108,7 @@ export default {
         }))
       }
       this.$nextTick(() => {
+        if (this._isDestroyed || this._isBeingDestroyed) return
         renderLinks(this.$refs.comments)
         renderMath(this.$refs['comment-list'], this.$twikoo.katex)
       })
@@ -114,6 +116,7 @@ export default {
     },
     async getConfig () {
       const res = await call('GET_CONFIG_FOR_ADMIN')
+      if (this._isDestroyed || this._isBeingDestroyed) return
       if (res.result && !res.result.code) {
         this.serverConfig = res.result.config
         this.checkConfig()
@@ -191,6 +194,7 @@ export default {
       await call('COMMENT_DELETE_FOR_ADMIN', {
         id: comment._id
       })
+      if (this._isDestroyed || this._isBeingDestroyed) return
       await this.getComments()
       this.loading = false
     },
@@ -206,6 +210,7 @@ export default {
         id: comment._id,
         set
       })
+      if (this._isDestroyed || this._isBeingDestroyed) return
       await this.getComments()
       this.loading = false
     }

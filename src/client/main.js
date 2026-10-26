@@ -1,4 +1,4 @@
-import { render } from './view'
+import { render, destroy } from './view'
 import { setLanguage, isUrl, getCommentsCountApi, getRecentCommentsApi, getVisitorsCountApi, updateVisitorsCount } from './utils'
 
 async function init (options = {}) {
@@ -25,6 +25,7 @@ async function getVisitorsCount (options = {}) {
 export default init
 export {
   init,
+  destroy,
   getCommentsCount,
   getRecentComments,
   getVisitorsCount
