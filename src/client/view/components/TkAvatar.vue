@@ -14,6 +14,7 @@ import iconUser from '@fortawesome/fontawesome-free/svgs/solid/user-circle.svg'
 export default {
   props: {
     config: Object,
+    loading: Boolean,
     avatar: String,
     nick: String,
     mail: String,
@@ -39,6 +40,7 @@ export default {
       return `initials&name=${this.nick}`
     },
     avatarInner () {
+      if (this.loading) return ''
       if (this.avatar) {
         return this.avatar
       }

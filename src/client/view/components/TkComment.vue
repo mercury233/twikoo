@@ -339,7 +339,7 @@ export default {
       this.setComment({ top })
     },
     onContentClick (event) {
-      if (this.$twikoo.serverConfig.LIGHTBOX === 'true') {
+      if (this.$twikoo.serverConfig?.LIGHTBOX === 'true') {
         popupLightbox(event)
       }
     },

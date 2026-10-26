@@ -1,7 +1,7 @@
 <template>
   <div class="tk-submit tk-fade-in" ref="tk-submit">
     <div class="tk-row">
-      <tk-avatar :config="config" :mail="mail" :nick="nick" />
+      <tk-avatar :config="config" :mail="mail" :nick="nick" :loading="avatarLoading" />
       <div class="tk-col">
         <tk-meta-input :nick="nick" :mail="mail" :link="link" @update="onMetaUpdate" @validate="isMetaValid = $event" :config="config" />
         <tk-input class="tk-input"
@@ -84,6 +84,7 @@ export default {
   props: {
     replyId: String,
     pid: String,
+    avatarLoading: Boolean,
     config: Object
   },
   data () {

@@ -1,6 +1,6 @@
 <template>
   <div class="tk-comments">
-    <tk-submit @load="initComments" :config="config" />
+    <tk-submit @load="initComments" :config="config" :avatar-loading="!configLoaded" />
     <div class="tk-comments-container" v-loading="loading">
       <div class="tk-comments-title">
         <span class="tk-comments-count" :class="{ __hidden: loading || (!comments.length && !searchKeyword) }">
@@ -87,6 +87,7 @@ export default {
       loadingMore: false,
       errorMessage: '',
       config: {},
+      configLoaded: false,
       comments: [],
       showExpand: false,
       count: 0,
@@ -105,11 +106,16 @@ export default {
   methods: {
     t,
     async initConfig () {
-      const result = await call('GET_CONFIG')
-      if (this._isDestroyed || this._isBeingDestroyed) return
-      if (result && result.result && result.result.config) {
-        this.config = result.result.config
-        Vue.prototype.$twikoo.serverConfig = result.result.config
+      try {
+        const result = await call('GET_CONFIG')
+        if (this._isDestroyed || this._isBeingDestroyed) return
+        if (result && result.result && result.result.config) {
+          this.config = result.result.config
+          Vue.prototype.$twikoo.serverConfig = result.result.config
+          this.configLoaded = true
+        }
+      } catch (e) {
+        console.error('加载配置失败', e)
       }
     },
     async initComments () {
@@ -212,25 +218,29 @@ export default {
       try {
         const comments = await call('COMMENT_GET', event)
         if (requestVersion !== this.requestVersion) return false
-        this.showExpand = false
-        if (comments && comments.result && comments.result.message) {
-          this.errorMessage = comments.result.message
-          return false
-        }
-        if (comments && comments.result && comments.result.data) {
-          this.comments = event.before || event.page > 1
-            ? this.comments.concat(comments.result.data)
-            : comments.result.data
-          this.showExpand = comments.result.more
-          this.count = comments.result.count || this.comments.length || 0
-          this.$nextTick(this.onCommentLoaded)
-          return true
-        }
+        return this.applyComments(comments, event)
       } catch (e) {
         if (requestVersion === this.requestVersion) {
           this.showExpand = false
           this.errorMessage = e.message
         }
+      }
+      return false
+    },
+    applyComments (comments, event) {
+      this.showExpand = false
+      if (comments && comments.result && comments.result.message) {
+        this.errorMessage = comments.result.message
+        return false
+      }
+      if (comments && comments.result && comments.result.data) {
+        this.comments = event.before || event.page > 1
+          ? this.comments.concat(comments.result.data)
+          : comments.result.data
+        this.showExpand = comments.result.more
+        this.count = comments.result.count || this.comments.length || 0
+        this.$nextTick(this.onCommentLoaded)
+        return true
       }
       return false
     },
@@ -241,12 +251,25 @@ export default {
       this.$emit('admin')
     }
   },
-  mounted () {
-    this.initConfig()
-    this.initComments()
+  async mounted () {
     // 保存配置后同步刷新配置和评论可见性
     app.$on('configUpdated', this.initConfig)
     app.$on('configUpdated', this.refreshPreservingState)
+    const requestVersion = ++this.requestVersion
+    const event = { url: getUrl(this.$twikoo.path), sort: this.currentSort, keyword: this.searchKeyword }
+    // 配置立即应用，评论等待配置请求结束，避免先按默认配置渲染。
+    const [, comments] = await Promise.allSettled([
+      this.initConfig(),
+      call('COMMENT_GET', event)
+    ])
+    if (this._isDestroyed || this._isBeingDestroyed) return
+    if (requestVersion !== this.requestVersion) return
+    if (comments.status === 'fulfilled') {
+      this.applyComments(comments.value, event)
+    } else {
+      this.errorMessage = comments.reason.message
+    }
+    this.loading = false
   },
   beforeDestroy () {
     this.requestVersion++
